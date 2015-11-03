@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Permissions Manager</string>
-    <string name="action_settings">Settings</string>
+
+    <string name="camera_permission">Camera Permission</string>
+    <string name="permission_status">Permission Status:</string>
+    <string name="not_given">Not given</string>
+    <string name="given">Given!!!</string>
+    <string name="has_asked">Has Asked:</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="never_ask_again">Never ask again</string>
+    <string name="go_to_app_permissions">Go to app permissions</string>
+    <string name="request_camera_permission">Request Camera Permission</string>
+    <string name="camera_granted_dont_ask">Camera is granted, don\'t ask again!</string>
+    <string name="user_selected_never_ask_again">User denied us and said don\'t ask again!</string>
 </resources>

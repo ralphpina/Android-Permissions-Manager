@@ -130,7 +130,7 @@ public class PermissionsManager {
      *
      * @return PermissionsManager instance
      */
-    protected static PermissionsManager get() {
+    public static PermissionsManager get() {
         return mInstance;
     }
 
@@ -214,6 +214,15 @@ public class PermissionsManager {
      * false if the user has never seen the dialog. We also check whether we should request the permission
      * rational for the system. If these two don't match up, the user has selected "Never ask again".
      *
+     * <b>Note: if we have the camera permission, and we call this method, it will return true.
+     * This is intentional as we don't want to ask for permissions once we have them. If you
+     * do that, you will loose the permission and dialog will come up again.</b>
+     *
+     * <b>Another note: if the user selected "Never ask again", then they give you permissions in
+     * the app settings page, and then remove them in the same page. This method will return true.
+     * Even though at that point you can ask for permissions. I have not been able to figure out a
+     * way around this.</b>
+     *
      * @param fragment asking for permission
      * @return whether the user has checked "Never ask again" option
      */
@@ -226,6 +235,15 @@ public class PermissionsManager {
      * Whether we've asked before, checked with {@link #hasAskedForCameraPermission()}, which returns
      * false if the user has never seen the dialog. We also check whether we should request the permission
      * rational for the system. If these two don't match up, the user has selected "Never ask again".
+     *
+     * <b>Note: if we have the camera permission, and we call this method, it will return true.
+     * This is intentional as we don't want to ask for permissions once we have them. If you
+     * do that, you will loose the permission and dialog will come up again.</b>
+     *
+     * <b>Another note: if the user selected "Never ask again", then they give you permissions in
+     * the app settings page, and then remove them in the same page. This method will return true.
+     * Even though at that point you can ask for permissions. I have not been able to figure out a
+     * way around this.</b>
      *
      * @param activity asking for permission
      * @return whether the user has checked "Never ask again" option

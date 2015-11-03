@@ -11,6 +11,8 @@ PermissionsManager.get()
                   .intentToAppSettings(activity);
 ```
 
+**If the user selected "Never ask again", then they give you permissions in the app settings page, and then remove them in the same page. This method will return true. Even though at that point you can ask for permissions. I have not been able to figure out a way around this.**
+
 # Request Other Permissions
 While there are methods to request some of the more common permissions, if the one you need is not there you can still use this library to request it. The example below tries to request body sensors:
 
@@ -27,7 +29,6 @@ PermissionsManager.get()
 
 # Contributing
 If you plan on contributing, please make sure to update the README and Javadocs if there are API changes and add tests!
-
 
 # License
     Copyright 2015 Ralph Pina.
