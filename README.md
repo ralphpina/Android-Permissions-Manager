@@ -1,7 +1,13 @@
 # Android Permissions Manager
 Easily manage Android Marshmellow and up runtime permissions.
 
-This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given. This is done using the Support Library methods for permissions.
+This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given. This is done using the Android Support library ```ActivityCompat``` and support ```Fragment``` methods for permissions.
+
+# Including Library
+Right now the entire ```library``` module needs to be imported into your project. However, I plan to have it up in Maven before 1.0.
+
+# Usage
+Right now the library supports the following permissions. See [Request Other Permissions][#Request Other Permissions] to see how to use this library for permissions not listed below. Namely SENSORS and SMS.
 
 # Never Ask Again
 If the user has selected "Never ask again" you can intent into the app's settings using the following:
