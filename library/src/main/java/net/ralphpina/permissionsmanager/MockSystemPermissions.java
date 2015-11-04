@@ -101,28 +101,16 @@ public class MockSystemPermissions {
     public void setIsCameraGranted(boolean isCameraGranted) {
         if (isCameraGranted) {
             mPermissionsGranted.add(CAMERA);
-            mPermissionsGranted.add(READ_EXTERNAL_STORAGE);
-            mPermissionsGranted.add(WRITE_EXTERNAL_STORAGE);
-            mPermissionsGranted.add(RECORD_AUDIO);
         } else {
             mPermissionsGranted.remove(CAMERA);
-            mPermissionsGranted.remove(READ_EXTERNAL_STORAGE);
-            mPermissionsGranted.remove(WRITE_EXTERNAL_STORAGE);
-            mPermissionsGranted.remove(RECORD_AUDIO);
         }
     }
 
     public void setShouldAllowCameraPermission(boolean shouldAllowCameraPermission) {
         if (shouldAllowCameraPermission) {
             mPermissionsOkToGrant.add(CAMERA);
-            mPermissionsOkToGrant.add(READ_EXTERNAL_STORAGE);
-            mPermissionsOkToGrant.add(WRITE_EXTERNAL_STORAGE);
-            mPermissionsOkToGrant.add(RECORD_AUDIO);
         } else {
             mPermissionsOkToGrant.remove(CAMERA);
-            mPermissionsOkToGrant.remove(READ_EXTERNAL_STORAGE);
-            mPermissionsOkToGrant.remove(WRITE_EXTERNAL_STORAGE);
-            mPermissionsOkToGrant.remove(RECORD_AUDIO);
         }
     }
 

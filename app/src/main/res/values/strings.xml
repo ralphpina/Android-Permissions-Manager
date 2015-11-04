@@ -13,4 +13,22 @@
     <string name="request_camera_permission">Request Camera Permission</string>
     <string name="camera_granted_dont_ask">Camera is granted, don\'t ask again!</string>
     <string name="user_selected_never_ask_again">User denied us and said don\'t ask again!</string>
+    <string name="location_permission">Location Permission</string>
+    <string name="request_location_permission">Request Location Permission</string>
+    <string name="request_audio_permission">Request Audio Permission</string>
+    <string name="audio_permission">Audio Recording Permission</string>
+    <string name="request_calendar_permission">Request Calendar Permission</string>
+    <string name="calendar_permission">Calendar Permission</string>
+    <string name="request_contacts_permission">Request Contacts Permission</string>
+    <string name="contacts_permission">Contacts Permission</string>
+    <string name="request_calling_permissions">Request Calling Permission</string>
+    <string name="calling_permission">Calling Permission</string>
+    <string name="request_storage_permission">Request Storage Permission</string>
+    <string name="storage_permission">Storage Permission</string>
+    <string name="location_granted_dont_ask">Location is granted, don\'t ask again!</string>
+    <string name="audio_granted_dont_ask">Audio is granted, don\'t ask again!</string>
+    <string name="calendar_granted_dont_ask">Calendar is granted, don\'t ask again!</string>
+    <string name="contacts_granted_dont_ask">Contacts is granted, don\'t ask again!</string>
+    <string name="calling_granted_dont_ask">Calling is granted, don\'t ask again!</string>
+    <string name="storage_granted_dont_ask">Storage is granted, don\'t ask again!</string>
 </resources>

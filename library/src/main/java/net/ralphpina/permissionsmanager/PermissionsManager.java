@@ -1007,4 +1007,9 @@ public class PermissionsManager {
         DbHelper.get().tearDown();
         mInstance = null;
     }
+
+    @VisibleForTesting
+    public static void clearDb() {
+        DbHelper.get().clearData();
+    }
 }

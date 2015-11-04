@@ -170,4 +170,20 @@ public class DbHelper {
             return false;
         }
     }
+
+    // ===== TESTING ===============================================================================
+
+    public void clearData() {
+        try {
+            mDb.putBoolean(HAS_ASKED_FOR_CAMERA_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_LOCATION_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_CALENDAR_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_CONTACTS_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_CALLING_KEY, false);
+            mDb.putBoolean(HAS_ASKED_FOR_STORAGE_KEY, false);
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+    }
 }
