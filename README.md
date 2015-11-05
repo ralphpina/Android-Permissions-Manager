@@ -7,7 +7,7 @@ This library is backwards compatible. In pre-Marshmallow devices permissions are
 Right now the entire ```library``` module needs to be imported into your project. However, I plan to have it up in Maven before 1.0.
 
 # Usage
-Right now the library supports the following permissions. See [Request Other Permissions](#Request Other Permissions) to see how to use this library for permissions not listed below. Namely SENSORS and SMS.
+Right now the library supports the following permissions. See [Request Other Permissions](#request-other-permissions) to see how to use this library for permissions not listed below. Namely SENSORS and SMS.
 
 # Never Ask Again
 If the user has selected "Never ask again" you can intent into the app's settings using the following:
