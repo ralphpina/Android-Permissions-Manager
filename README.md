@@ -186,6 +186,7 @@ Request the permission. ```this``` can be an Activity of support Fragment.
 ```java
 PermissionsManager.get()
                   .requestAudioRecordingPermission(this);
+```
 
 ### Phone
 
