@@ -7,19 +7,20 @@ This library is backwards compatible. In pre-Marshmallow devices permissions are
 Right now the entire ```library``` module needs to be imported into your project. However, I plan to have it up in Maven before 1.0.
 
 # Usage
-Right now the library supports the following permission groups:
+This library provides an interface to request ```PROTECTION_DANGEROUS``` Android permissions. Permissions fall into groups that are granted by the user. See which permissions fall into each group in the [Android docs](http://developer.android.com/guide/topics/security/permissions.html#perm-groups).Right now the library supports the following permission groups:
 
-CALENDAR
+- CALENDAR
+- CAMERA
+- CONTACTS
+- LOCATION
+- MICROPHONE
+- PHONE
+- STORAGE
 
-CAMERA_PERMISSION;
-LOCATION_PERMISSION;
-AUDIO_RECORDING_PERMISSION;
-PermissionsManager.REQUEST_CALENDAR_PERMISSION;
-PermissionsManager.REQUEST_CONTACTS_PERMISSION;
-PermissionsManager.REQUEST_STORAGE_PERMISSION;
-PermissionsManager.REQUEST_CALL_PHONE_PERMISSION;
+See [Request Other Permissions](#request-other-permissions) to see how to use this library for permissions not listed above, namely:
 
-See [Request Other Permissions](#request-other-permissions) to see how to use this library for permissions not listed below, namely SENSORS and SMS. This library provides an interface to request ```PROTECTION_DANGEROUS``` Android permissions. Permissions fall into groups that are granted by the user. See which permissions fall into each group in the [Android docs](http://developer.android.com/guide/topics/security/permissions.html#perm-groups).
+- SENSORS
+- SMS.
 
 The API allows you to check 3 things:
   1. Whether the permission has been granted.
@@ -82,6 +83,27 @@ PermissionsManager.REQUEST_STORAGE_PERMISSION;
 PermissionsManager.REQUEST_CALL_PHONE_PERMISSION;
 ```
 
+### Calendar
+
+```java
+PermissionsManager.get()
+                  .isCalendarGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForCalendarPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForCalendar(mActivity);
+```
+
+Request the permission. ```this``` can be an Activity of support Fragment.
+```java
+PermissionsManager.get()
+                  .requestCalendarPermission(this);
+```
+
 ### Camera
 
 ```java
@@ -101,6 +123,105 @@ Request the permission. ```this``` can be an Activity of support Fragment.
 ```java
 PermissionsManager.get()
                   .requestCameraPermission(this);
+```
+
+### Contacts
+
+```java
+PermissionsManager.get()
+                  .isContactsGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForContactsPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForContacts(mActivity);
+```
+
+Request the permission. ```this``` can be an Activity of support Fragment.
+```java
+PermissionsManager.get()
+                  .requestContactsPermission(this);
+```
+
+### Location
+
+```java
+PermissionsManager.get()
+                  .isLocationGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForLocationPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForLocation(mActivity);
+```
+
+Request the permission. ```this``` can be an Activity of support Fragment.
+```java
+PermissionsManager.get()
+                  .requestLocationPermission(this);
+```
+
+### Microphone
+
+```java
+PermissionsManager.get()
+                  .isAudioRecordingGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForAudioRecordingPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForAudio(mActivity);
+```
+
+### Phone
+
+```java
+PermissionsManager.get()
+                  .isCallingGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForCallingPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForCalling(mActivity);
+```
+
+Request the permission. ```this``` can be an Activity of support Fragment.
+```java
+PermissionsManager.get()
+                  .requestCallingPermission(this);
+```
+
+### Storage
+
+```java
+PermissionsManager.get()
+                  .isStorageGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForStoragePermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForStorage(mActivity);
+```
+
+Request the permission. ```this``` can be an Activity of support Fragment.
+```java
+PermissionsManager.get()
+                  .requestStoragePermission(this);
 ```
 
 # Never Ask Again
