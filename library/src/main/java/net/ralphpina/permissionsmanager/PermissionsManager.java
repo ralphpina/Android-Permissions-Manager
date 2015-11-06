@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+import android.support.v4.BuildConfig;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -33,7 +34,7 @@ import static android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS;
 
 /**
  * PermissionsManager is the point of entry to finding about and requesting permissions.
- * <p/>
+ *
  * This class helper methods for the following permissions:
  * <ul>
  * <li>Camera</li>
@@ -44,10 +45,10 @@ import static android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS;
  * <li>Storage</li>
  * <li>Phone Call</li>
  * </ul>
- * <p/>
+ *
  * All other permissions can be requested. But it requires more management from the developer.
  * However they can easily be added in the future.
- * <p/>
+ *
  * The method {@link #intentToAppSettings(Activity)} can be used to open the app's settings
  * to turn on a permission if the user checked "Never ask again".
  */
@@ -152,7 +153,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#CAMERA}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CAMERA_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -168,7 +169,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#CAMERA}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CAMERA_PERMISSION}
      *
      * @param activity asking for the permission
@@ -288,7 +289,7 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#ACCESS_FINE_LOCATION}</li>
      * <li>{@link Manifest.permission#ACCESS_COARSE_LOCATION}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_LOCATION_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -307,7 +308,7 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#ACCESS_FINE_LOCATION}</li>
      * <li>{@link Manifest.permission#ACCESS_COARSE_LOCATION}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_LOCATION_PERMISSION}
      *
      * @param activity asking for the permission
@@ -343,6 +344,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}, its the same logic, but for location
+     *
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForLocation(@NonNull Fragment fragment) {
         return !(hasAskedForLocationPermission() == shouldShowLocationRationale(
@@ -351,6 +355,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Activity)}, its the same logic, but for location
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForLocation(@NonNull Activity activity) {
         return !(hasAskedForLocationPermission() == shouldShowLocationRationale(
@@ -376,7 +383,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#RECORD_AUDIO}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_AUDIO_RECORDING_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -394,7 +401,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#RECORD_AUDIO}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_AUDIO_RECORDING_PERMISSION}
      *
      * @param activity asking for the permission
@@ -428,6 +435,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForAudio(@NonNull Fragment fragment) {
         return !(hasAskedForAudioRecordingPermission() == shouldShowAudioRecordingRationale(fragment));
@@ -435,6 +445,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForAudio(@NonNull Activity activity) {
         return !(hasAskedForAudioRecordingPermission() == shouldShowAudioRecordingRationale(activity));
@@ -458,7 +471,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#READ_CALENDAR}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CALENDAR_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -474,7 +487,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#READ_CALENDAR}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CALENDAR_PERMISSION}
      *
      * @param activity asking for the permission
@@ -496,16 +509,19 @@ public class PermissionsManager {
     @VisibleForTesting
     protected boolean shouldShowCalendarRationale(@NonNull Fragment fragment) {
         return !isCalendarGranted() && shouldShowRequestPermissionRationale(fragment,
-                                                                                 READ_CALENDAR);
+                                                                            READ_CALENDAR);
     }
 
     private boolean shouldShowCalendarRationale(@NonNull Activity activity) {
         return !isCalendarGranted() && shouldShowRequestPermissionRationale(activity,
-                                                                                 READ_CALENDAR);
+                                                                            READ_CALENDAR);
     }
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForCalendar(@NonNull Fragment fragment) {
         return !(hasAskedForCalendarPermission() == shouldShowCalendarRationale(fragment));
@@ -513,6 +529,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForCalendar(@NonNull Activity activity) {
         return !(hasAskedForCalendarPermission() == shouldShowCalendarRationale(activity));
@@ -560,7 +579,7 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#WRITE_CONTACTS}</li>
      * <li>{@link Manifest.permission#GET_ACCOUNTS}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CONTACTS_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -579,7 +598,7 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#WRITE_CONTACTS}</li>
      * <li>{@link Manifest.permission#GET_ACCOUNTS}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CONTACTS_PERMISSION}
      *
      * @param activity asking for the permission
@@ -642,6 +661,8 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForContacts(@NonNull Fragment fragment) {
         return !(hasAskedForContactsPermission()
@@ -650,6 +671,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForContacts(@NonNull Activity activity) {
         return !(hasAskedForContactsPermission()
@@ -674,7 +698,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#CALL_PHONE}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CALL_PHONE_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -692,7 +716,7 @@ public class PermissionsManager {
      * <ul>
      * <li>{@link Manifest.permission#CALL_PHONE}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_CALL_PHONE_PERMISSION}
      *
      * @param activity asking for the permission
@@ -728,6 +752,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForCalling(@NonNull Fragment fragment) {
         return !(hasAskedForCallingPermission()
@@ -736,6 +763,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForCalling(@NonNull Activity activity) {
         return !(hasAskedForCallingPermission()
@@ -780,7 +810,7 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#WRITE_EXTERNAL_STORAGE}</li>
      * <li>{@link Manifest.permission#READ_EXTERNAL_STORAGE}</li>
      * </ul>
-     * <p/>
+     *
      * Resulting permission can be checked using {@link #REQUEST_STORAGE_PERMISSION}
      *
      * @param fragment asking for the permission
@@ -800,9 +830,9 @@ public class PermissionsManager {
      * <li>{@link Manifest.permission#WRITE_EXTERNAL_STORAGE}</li>
      * <li>{@link Manifest.permission#READ_EXTERNAL_STORAGE}</li>
      * </ul>
-     * <p/>
-     * Resulting permission can be checked using {@link #REQUEST_STORAGE_PERMISSION}
      *
+     * Resulting permission can be checked using {@link #REQUEST_STORAGE_PERMISSION}
+
      * @param activity asking for the permission
      */
     public void requestStoragePermission(@NonNull Activity activity) {
@@ -837,6 +867,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param fragment to check with
+     * @return if should not ask
      */
     public boolean neverAskForStorage(@NonNull Fragment fragment) {
         return !(hasAskedForStoragePermission() == shouldShowRequestStorageRationale(
@@ -845,6 +878,9 @@ public class PermissionsManager {
 
     /**
      * See {@link #neverAskForCamera(Fragment)}
+     *
+     * @param activity to check with
+     * @return if should not ask
      */
     public boolean neverAskForStorage(@NonNull Activity activity) {
         return !(hasAskedForStoragePermission() == shouldShowRequestStorageRationale(
@@ -858,7 +894,7 @@ public class PermissionsManager {
     /**
      * Request a permission.
      *
-     * @param activity requesting the permission
+     * @param activity    requesting the permission
      * @param requestCode to listen for in {@link Activity#onRequestPermissionsResult(int, String[], int[])}
      * @param permissions to request
      */
@@ -880,7 +916,7 @@ public class PermissionsManager {
     /**
      * Request a permission.
      *
-     * @param fragment requesting the permission
+     * @param fragment    requesting the permission
      * @param requestCode to listen for in {@link Fragment#onRequestPermissionsResult(int, String[], int[])}
      * @param permissions to request
      */
@@ -901,7 +937,7 @@ public class PermissionsManager {
     /**
      * Wraps {@link Fragment#shouldShowRequestPermissionRationale(String)}
      *
-     * @param fragment checking for permissions
+     * @param fragment   checking for permissions
      * @param permission to check
      * @return if we should show
      */
@@ -916,7 +952,7 @@ public class PermissionsManager {
     /**
      * Wraps {@link ActivityCompat#shouldShowRequestPermissionRationale(Activity, String)}
      *
-     * @param activity checking for permissions
+     * @param activity   checking for permissions
      * @param permission to check
      * @return if we should show
      */
@@ -1004,12 +1040,14 @@ public class PermissionsManager {
     }
 
     protected static void tearDown() {
-        DbHelper.get().tearDown();
+        DbHelper.get()
+                .tearDown();
         mInstance = null;
     }
 
     @VisibleForTesting
     public static void clearDb() {
-        DbHelper.get().clearData();
+        DbHelper.get()
+                .clearData();
     }
 }

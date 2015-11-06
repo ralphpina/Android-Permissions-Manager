@@ -39,3 +39,41 @@ dependencies {
     androidTestCompile 'com.android.support.test:rules:0.4.1'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 }
+
+task androidJavadocs(type: Javadoc) {
+    options {
+        linksOffline "http://d.android.com/reference", "${android.sdkDirectory}/docs/reference"
+
+    }
+    failOnError false
+    source = "src/main/java"
+    classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from "src/main/java"
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
+android.libraryVariants.all { variant ->
+    task("generate${variant.name}Javadoc", type: Javadoc) {
+        description "Generates Javadoc for $variant.name."
+        source = variant.javaCompile.source
+        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+        options.links("http://d.android.com/reference/");
+        exclude '**/BuildConfig.java'
+        exclude '**/R.java'
+    }
+}

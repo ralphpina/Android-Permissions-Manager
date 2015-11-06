@@ -3,6 +3,8 @@ Easily manage Android Marshmellow and up runtime permissions.
 
 This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given. This is done using the Android Support library ```ActivityCompat``` and support ```Fragment``` methods for permissions. I've tried to make sure this library is well tested.
 
+Javadocs can be found in the [docs](/docs) folder.
+
 # Including Library
 Right now the entire ```library``` module needs to be imported into your project. However, I plan to have it up in Maven before 1.0.
 
@@ -256,6 +258,10 @@ PermissionsManager.get()
 
 # Contributing
 If you plan on contributing, please make sure to update the README and Javadocs if there are API changes and add tests!
+
+**To generate Javadocs:**
+-
+./gradlew generateReleaseJavadoc
 
 # License
     Copyright 2015 Ralph Pina.
