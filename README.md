@@ -1,5 +1,5 @@
 # Android Permissions Manager
-Easily manage Android Marshmellow and up runtime permissions.
+Easily manage Android Marshmallow and up runtime permissions.
 
 This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given. This is done using the Android Support library ```ActivityCompat``` and support ```Fragment``` methods for permissions. I've tried to make sure this library is well tested.
 
