@@ -6,7 +6,11 @@ This library is backwards compatible. In pre-Marshmallow devices permissions are
 Javadocs can be found in the [docs](/docs) folder.
 
 # Including Library
-Right now the entire ```library``` module needs to be imported into your project. However, I plan to have it up in Maven before 1.0.
+Simply imported it into your gradle project like so:
+
+```groovy
+compile 'net.ralphpina.permissionsmanager:permissions-manager:1.0.0'
+```
 
 # Usage
 This library provides an interface to request ```PROTECTION_DANGEROUS``` Android permissions. Permissions fall into groups that are granted by the user. See which permissions fall into each group in the [Android docs](http://developer.android.com/guide/topics/security/permissions.html#perm-groups).Right now the library supports the following permission groups:
