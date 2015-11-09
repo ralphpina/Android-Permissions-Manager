@@ -55,7 +55,7 @@ Make sure to include this ```Application``` subclass in your ```AndroidManifest.
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
-        android:name=".PMApplication"
+        android:name=".MyApplication"
         ...
     </application>
     
