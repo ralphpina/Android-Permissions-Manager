@@ -12,6 +12,18 @@ Simply imported it into your gradle project like so:
 compile 'net.ralphpina.permissionsmanager:permissions-manager:1.0.0'
 ```
 
+Or if you like using [Jitpack.io](https://jitpack.io) you can include it in your gradle file like so:
+
+```groovy
+repositories {
+  maven { url "https://jitpack.io" }
+}
+
+dependencies {
+  compile 'com.github.ralphpina:Android-Permissions-Manager:v1.0.0'
+}
+```
+
 # Usage
 This library provides an interface to request ```PROTECTION_DANGEROUS``` Android permissions. Permissions fall into groups that are granted by the user. See which permissions fall into each group in the [Android docs](http://developer.android.com/guide/topics/security/permissions.html#perm-groups).Right now the library supports the following permission groups:
 
