@@ -54,7 +54,19 @@ public class PermissionsManagerStatus extends BaseObservable {
     }
 
     public void updateStatus() {
-        // Camera
+        updateCameraStatus();
+        updateLocationStatus();
+        updateAudioStatus();
+        updateCalendarStatus();
+        updateContactsStatus();
+        updateCallingStatus();
+        updateStorageStatus();
+        notifyChange();
+    }
+
+    // ----- Camera Status -------------------------------------------------------------------------
+
+    private void updateCameraStatus() {
         this.cameraPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isCameraGranted()
@@ -67,8 +79,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.cameraNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForCamera(mActivity);
+    }
 
-        // Location
+    // ----- Location Status -----------------------------------------------------------------------
+
+    private void updateLocationStatus() {
         this.locationPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isLocationGranted()
@@ -81,8 +96,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.locationNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForLocation(mActivity);
+    }
 
-        // Audio
+    // ----- Audio Status --------------------------------------------------------------------------
+
+    private void updateAudioStatus() {
         this.audioPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isAudioRecordingGranted()
@@ -95,8 +113,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.audioNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForAudio(mActivity);
+    }
 
-        // Calendar
+    // ----- Calendar Status -----------------------------------------------------------------------
+
+    private void updateCalendarStatus() {
         this.calendarPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isCalendarGranted()
@@ -109,8 +130,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.calendarNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForCalendar(mActivity);
+    }
 
-        // Contacts
+    // ----- Contact Status ------------------------------------------------------------------------
+
+    private void updateContactsStatus() {
         this.contactsPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isContactsGranted()
@@ -123,8 +147,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.contactsNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForContacts(mActivity);
+    }
 
-        // Calling
+    // ----- Calling Status -------------------------------------------------------------------------
+
+    private void updateCallingStatus() {
         this.callingPermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isCallingGranted()
@@ -137,8 +164,11 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.callingNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForCalling(mActivity);
+    }
 
-        // Storage
+    // ----- Storage Status ------------------------------------------------------------------------
+
+    private void updateStorageStatus() {
         this.storagePermissionStatus = PMApplication.get()
                                                    .getString(PermissionsManager.get()
                                                                                 .isStorageGranted()
@@ -151,8 +181,6 @@ public class PermissionsManagerStatus extends BaseObservable {
                                                       : R.string.no);
         this.storageNeverAskAgain = PermissionsManager.get()
                                                      .neverAskForStorage(mActivity);
-
-        notifyChange();
     }
 
     // ===== CAMERA ================================================================================
