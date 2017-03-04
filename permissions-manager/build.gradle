@@ -1,18 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.android.databinding'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
+//apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.jfrog.bintray'
 
 group = 'net.ralphpina.permissionsmanager'
 version = '1.0.0'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0.0"
 
@@ -30,7 +29,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     // Android annotations
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
 
     // db
     compile 'com.snappydb:snappydb-lib:0.5.2'
@@ -39,10 +38,10 @@ dependencies {
     // TESTING
     testCompile 'junit:junit:4.12'
     // Force usage of support annotations in the test app, since it is internally used by the runner module.
-    androidTestCompile 'com.android.support:support-annotations:23.1.0'
-    androidTestCompile 'com.android.support.test:runner:0.4.1'
-    androidTestCompile 'com.android.support.test:rules:0.4.1'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
+    androidTestCompile 'com.android.support:support-annotations:25.2.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
 }
 
 task androidJavadocs(type: Javadoc) {
@@ -80,18 +79,18 @@ artifacts {
 //    }
 //}
 
-android.libraryVariants.all { variant ->
-    task("generate${variant.name}Javadoc", type: Javadoc) {
-        description "Generates Javadoc for $variant.name."
-        source = variant.javaCompile.source
-        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
-        options.links("http://docs.oracle.com/javase/7/docs/api/");
-        options.links("http://d.android.com/reference/");
-        exclude '**/BuildConfig.java'
-        exclude '**/R.java'
-    }
-}
+//android.libraryVariants.all { variant ->
+//    task("generate${variant.name}Javadoc", type: Javadoc) {
+//        description "Generates Javadoc for $variant.name."
+//        source = variant.javaCompile.source
+//        ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+//        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+//        options.links("http://docs.oracle.com/javase/7/docs/api/");
+//        options.links("http://d.android.com/reference/");
+//        exclude '**/BuildConfig.java'
+//        exclude '**/R.java'
+//    }
+//}
 
 //install {
 //    repositories.mavenInstaller {
@@ -127,21 +126,21 @@ android.libraryVariants.all { variant ->
 //    }
 //}
 
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    configurations = ['archives']
-    pkg {
-        repo = 'maven'
-        name = 'permissions-manager'
-        userOrg = user
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
-        version {
-            name = '1.0.0'
-            desc = 'Easily manage Android Marshmallow and up runtime permissions. This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given.'
-            vcsTag = '1.0.0'
-            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
-        }
-    }
-}
+//bintray {
+//    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+//    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+//    configurations = ['archives']
+//    pkg {
+//        repo = 'maven'
+//        name = 'permissions-manager'
+//        userOrg = user
+//        licenses = ['Apache-2.0']
+//        vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
+//        version {
+//            name = '1.0.0'
+//            desc = 'Easily manage Android Marshmallow and up runtime permissions. This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given.'
+//            vcsTag = '1.0.0'
+//            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
+//        }
+//    }
+//}
