@@ -1,17 +1,10 @@
 package net.ralphpina.permissionsmanager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
-import com.snappydb.DB;
-import com.snappydb.DBFactory;
-import com.snappydb.SnappydbException;
-
-/**
- * Wraps SnappyDb and provides readable methods
- */
 public class DbHelper {
-
-    private static final String DB_NAME = "android_permissions_manager";
 
     private static final String HAS_ASKED_FOR_CAMERA_KEY          = "has_asked_for_camera";
     private static final String HAS_ASKED_FOR_LOCATION_KEY        = "has_asked_for_location";
@@ -20,170 +13,142 @@ public class DbHelper {
     private static final String HAS_ASKED_FOR_CONTACTS_KEY        = "has_asked_for_contacts";
     private static final String HAS_ASKED_FOR_CALLING_KEY         = "has_asked_for_calling";
     private static final String HAS_ASKED_FOR_STORAGE_KEY         = "has_asked_for_storage";
+    private static final String HAS_ASKED_FOR_BODY_SENSORS_KEY    = "has_asked_for_body_sensors";
+    private static final String HAS_ASKED_FOR_SMS_KEY             = "has_asked_for_sms";
 
-    private static DbHelper mInstance;
-    private        DB       mDb;
+    private static DbHelper          mInstance;
+    private final  SharedPreferences preferences;
 
-    protected static void init(Context context) throws SnappydbException {
+    static void init(Context context) {
         mInstance = new DbHelper(context);
     }
 
-    protected void tearDown() {
-        try {
-            mDb.destroy();
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void tearDown() {
+        clearData();
         mInstance = null;
     }
 
-    private DbHelper(Context context) throws SnappydbException {
-        mDb = DBFactory.open(context, DB_NAME);
+    private DbHelper(Context context) {
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    protected static DbHelper get() {
+    static DbHelper get() {
         return mInstance;
     }
 
     // ==== CAMERA =================================================================================
 
-    public void setCameraPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_CAMERA_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setCameraPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_CAMERA_KEY, true)
+                .apply();
     }
 
-    public boolean isCameraPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_CAMERA_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isCameraPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_CAMERA_KEY, false);
     }
 
     // ===== LOCATION ==============================================================================
 
-    public void setLocationPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_LOCATION_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setLocationPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_LOCATION_KEY, true)
+                .apply();
     }
 
-    public boolean isLocationPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_LOCATION_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isLocationPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_LOCATION_KEY, false);
     }
 
-    // ===== AUDIO RECORDING =======================================================================
+    // ===== MICROPHONE ============================================================================
 
-    public void setAudioPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setMicrophonePermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY, true)
+                .apply();
     }
 
-    public boolean isAudioPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isAudioPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY, false);
     }
 
     // ===== CALENDAR ==============================================================================
 
-    public void setCalendarPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_CALENDAR_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setCalendarPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_CALENDAR_KEY, true)
+                .apply();
     }
 
-    public boolean isCalendarPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_CALENDAR_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isCalendarPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_CALENDAR_KEY, false);
     }
 
     // ===== CONTACTS ==============================================================================
 
-    public void setContactsPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_CONTACTS_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setContactsPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_CONTACTS_KEY, true)
+                .apply();
     }
 
-    public boolean isContactsPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_CONTACTS_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isContactsPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_CONTACTS_KEY, false);
     }
 
-    // ===== CALLING ==============================================================================
+    // ===== PHONE ==============================================================================
 
-    public void setCallingPermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_CALLING_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setPhonePermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_CALLING_KEY, true)
+                .apply();
     }
 
-    public boolean isCallingPermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_CALLING_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isPhonePermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_CALLING_KEY, false);
     }
 
     // ===== STORAGE ===============================================================================
 
-    public void setStoragePermissionsAsked() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_STORAGE_KEY, true);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void setStoragePermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_STORAGE_KEY, true)
+                .apply();
     }
 
-    public boolean isStoragePermissionsAsked() {
-        try {
-            return mDb.getBoolean(HAS_ASKED_FOR_STORAGE_KEY);
-        } catch (SnappydbException e) {
-            return false;
-        }
+    boolean isStoragePermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_STORAGE_KEY, false);
+    }
+
+    // ===== BODY SENSORS ==============================================================================
+
+    void setBodySensorsPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_BODY_SENSORS_KEY, true)
+                .apply();
+    }
+
+    boolean isBodySensorsPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_BODY_SENSORS_KEY, false);
+    }
+
+    // ===== SMS ==============================================================================
+
+    void setSmsPermissionsAsked() {
+        preferences.edit()
+                .putBoolean(HAS_ASKED_FOR_SMS_KEY, true)
+                .apply();
+    }
+
+    boolean isSmsPermissionsAsked() {
+        return preferences.getBoolean(HAS_ASKED_FOR_SMS_KEY, false);
     }
 
     // ===== TESTING ===============================================================================
 
-    public void clearData() {
-        try {
-            mDb.putBoolean(HAS_ASKED_FOR_CAMERA_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_LOCATION_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_AUDIO_RECORDING_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_CALENDAR_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_CONTACTS_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_CALLING_KEY, false);
-            mDb.putBoolean(HAS_ASKED_FOR_STORAGE_KEY, false);
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
+    void clearData() {
+        preferences.edit()
+                .clear()
+                .apply();
     }
 }
