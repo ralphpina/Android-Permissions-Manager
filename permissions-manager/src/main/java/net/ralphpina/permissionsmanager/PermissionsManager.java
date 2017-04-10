@@ -961,7 +961,7 @@ public class PermissionsManager {
 
     @VisibleForTesting
     boolean shouldShowRequestSmsRationale(@NonNull Fragment fragment) {
-        return !isOnePhoneGranted()
+        return !isOneSmsGranted()
                 && shouldShowRequestPermissionRationale(fragment, SEND_SMS)
                 && shouldShowRequestPermissionRationale(fragment, RECEIVE_SMS)
                 && shouldShowRequestPermissionRationale(fragment, READ_SMS)
@@ -970,7 +970,7 @@ public class PermissionsManager {
     }
 
     private boolean shouldShowRequestSmsRationale(@NonNull Activity activity) {
-        return !isOnePhoneGranted()
+        return !isOneSmsGranted()
                 && shouldShowRequestPermissionRationale(activity, SEND_SMS)
                 && shouldShowRequestPermissionRationale(activity, RECEIVE_SMS)
                 && shouldShowRequestPermissionRationale(activity, READ_SMS)

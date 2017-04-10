@@ -1,27 +1,29 @@
 package net.ralphpina.permissionsmanager.sample;
 
 import android.support.test.rule.ActivityTestRule;
-import android.util.Log;
 
 import net.ralphpina.permissionsmanager.PermissionsManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.BODY_SENSORS;
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_CALENDAR;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static org.hamcrest.CoreMatchers.is;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -31,20 +33,20 @@ import static org.junit.Assert.assertTrue;
  */
 public class MainActivityTest {
 
-    private static final String TAG = "MainActivityTest";
-
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = mActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(
+            MainActivity.class,
+            false,
+            false);
 
     @Before
     public void setUp() {
-        Log.e(TAG, "=== setUp() ===");
         PermissionsManager.clearDb();
         PermissionsManager.get()
-                          .injectMockSystemPermissions();
+                .injectMockSystemPermissions();
     }
 
+    @After
     public void tearDown() {
         PermissionsManager.clearDb();
     }
@@ -53,314 +55,194 @@ public class MainActivityTest {
 
     @Test
     public void correct_ui_for_camera() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
-        {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCameraNeverAskAgain(), is(false));
-        }
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_camera_permissions)).check(matches(withText(
+                "Request Camera Permission")));
+        onView(withId(R.id.camera_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.camera_permissions_has_asked)).check(matches(withText("No")));
+        onView(withId(R.id.camera_permissions_never_again)).check(matches(withText("No")));
     }
 
     @Test
     public void clicking_button_and_denying_camera_permission() throws Exception {
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.button_camera_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
-        {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCameraNeverAskAgain(), is(false));
-        }
+
+        onView(withId(R.id.camera_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.camera_permissions_has_asked)).check(matches(withText("Yes")));
+        onView(withId(R.id.camera_permissions_never_again)).check(matches(withText("No")));
     }
 
     @Test
     public void clicking_button_and_allowing_camera_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowCameraPermission(true);
+                .getMockSystemPermissions()
+                .setShouldAllowCameraPermission(true);
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.button_camera_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
-        {
-            assertTrue(PermissionsManager.get()
-                                         .isCameraGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCameraNeverAskAgain(), is(true));
-        }
+        onView(withId(R.id.camera_permissions_status)).check(matches(withText("Given!!!")));
+        onView(withId(R.id.camera_permissions_has_asked)).check(matches(withText("Yes")));
+        onView(withId(R.id.camera_permissions_never_again)).check(matches(withText("Yes")));
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_camera() throws Exception {
+        mActivityRule.launchActivity(null);
         onView(withId(R.id.button_camera_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
+
             assertFalse(PermissionsManager.get()
-                                          .isCameraGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCameraNeverAskAgain(), is(false));
+                                .isCameraGranted());
+            onView(withId(R.id.camera_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.camera_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.camera_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(CAMERA);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(CAMERA);
         onView(withId(R.id.button_camera_permissions)).perform(click());
+        // fake asking
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
-        {
-            assertFalse(PermissionsManager.get()
-                                          .isCameraGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCameraHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCameraNeverAskAgain(), is(true));
+                .getPermissionsManagerStatus()
+                .updateStatus();
+        onView(withId(R.id.camera_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.camera_permissions_has_asked)).check(matches(withText("Yes")));
+        synchronized (this) {
+            wait(100);
         }
+        onView(withId(R.id.camera_permissions_never_again)).check(matches(withText("Yes")));
     }
 
     // ===== LOCATION ================================================================================
 
     @Test
     public void correct_ui_for_location() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isLocationNeverAskAgain(), is(false));
+            onView(withId(R.id.location_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.location_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.location_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_location_permission() throws Exception {
-        onView(withId(R.id.button_location_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+
+        onView(withId(R.id.button_location_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isLocationNeverAskAgain(), is(false));
+            onView(withId(R.id.location_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.location_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.location_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_location_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowLocationPermission(true);
-        onView(withId(R.id.button_location_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getMockSystemPermissions()
+                .setShouldAllowLocationPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_location_permissions)).perform(scrollTo(), click());
         {
-            assertTrue(PermissionsManager.get()
-                                         .isLocationGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isLocationNeverAskAgain(), is(true));
+            onView(withId(R.id.location_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.location_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.location_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_location() throws Exception {
-        onView(withId(R.id.button_location_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_location_permissions)).perform(scrollTo(), click());
         {
-            assertFalse(PermissionsManager.get()
-                                          .isLocationGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isLocationNeverAskAgain(), is(false));
+            onView(withId(R.id.location_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.location_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.location_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(ACCESS_COARSE_LOCATION);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(ACCESS_COARSE_LOCATION);
         onView(withId(R.id.button_location_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isLocationGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getLocationHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isLocationNeverAskAgain(), is(true));
+            onView(withId(R.id.location_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.location_permissions_has_asked)).check(matches(withText("Yes")));
+            synchronized (this) {
+                wait(100);
+            }
+            onView(withId(R.id.location_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
-    // ===== AUDIO =================================================================================
+    // ===== MICROPHONE ============================================================================
 
     @Test
     public void correct_ui_for_audio() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isAudioNeverAskAgain(), is(false));
+            onView(withId(R.id.audio_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.audio_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.audio_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_audio_permission() throws Exception {
-        onView(withId(R.id.button_audio_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_audio_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_audio_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isAudioNeverAskAgain(), is(false));
+            onView(withId(R.id.audio_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.audio_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.audio_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_audio_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowAudioRecordingPermission(true);
-        onView(withId(R.id.button_audio_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_audio_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getMockSystemPermissions()
+                .setShouldAllowAudioRecordingPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_audio_permissions)).perform(scrollTo(), click());
         {
-            assertTrue(PermissionsManager.get()
-                                         .isAudioRecordingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isAudioNeverAskAgain(), is(true));
+            onView(withId(R.id.audio_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.audio_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.audio_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_audio() throws Exception {
-        onView(withId(R.id.button_audio_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_audio_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_audio_permissions)).perform(scrollTo(), click());
         {
-            assertFalse(PermissionsManager.get()
-                                          .isAudioRecordingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isAudioNeverAskAgain(), is(false));
+            onView(withId(R.id.audio_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.audio_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.audio_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(RECORD_AUDIO);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(RECORD_AUDIO);
         onView(withId(R.id.button_audio_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isAudioRecordingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getAudioHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isAudioNeverAskAgain(), is(true));
+            onView(withId(R.id.audio_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.audio_permissions_has_asked)).check(matches(withText("Yes")));
+            synchronized (this) {
+                wait(100);
+            }
+            onView(withId(R.id.audio_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
@@ -368,108 +250,66 @@ public class MainActivityTest {
 
     @Test
     public void correct_ui_for_calendar() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCalendarNeverAskAgain(), is(false));
+            onView(withId(R.id.calendar_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calendar_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.calendar_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_calendar_permission() throws Exception {
-        onView(withId(R.id.button_calendar_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calendar_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_calendar_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCalendarNeverAskAgain(), is(false));
+            onView(withId(R.id.calendar_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calendar_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calendar_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_calendar_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowCalendarPermission(true);
-        onView(withId(R.id.button_calendar_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calendar_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getMockSystemPermissions()
+                .setShouldAllowCalendarPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_calendar_permissions)).perform(scrollTo(), click());
         {
-            assertTrue(PermissionsManager.get()
-                                         .isCalendarGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCalendarNeverAskAgain(), is(true));
+            onView(withId(R.id.calendar_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.calendar_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calendar_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_calendar() throws Exception {
-        onView(withId(R.id.button_calendar_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calendar_permissions)).perform(click());
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_calendar_permissions)).perform(scrollTo(), click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isCalendarGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCalendarNeverAskAgain(), is(false));
+            onView(withId(R.id.calendar_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calendar_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calendar_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(READ_CALENDAR);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(READ_CALENDAR);
         onView(withId(R.id.button_calendar_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isCalendarGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCalendarHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCalendarNeverAskAgain(), is(true));
+            onView(withId(R.id.calendar_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calendar_permissions_has_asked)).check(matches(withText("Yes")));
+            synchronized (this) {
+                wait(100);
+            }
+            onView(withId(R.id.calendar_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
@@ -477,108 +317,65 @@ public class MainActivityTest {
 
     @Test
     public void correct_ui_for_contacts() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isContactsNeverAskAgain(), is(false));
+            onView(withId(R.id.contacts_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.contacts_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.contacts_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_contacts_permission() throws Exception {
-        onView(withId(R.id.button_contacts_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_contacts_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_contacts_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isContactsNeverAskAgain(), is(false));
+            onView(withId(R.id.contacts_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.contacts_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.contacts_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_contacts_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowContactsPermission(true);
-        onView(withId(R.id.button_contacts_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_contacts_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getMockSystemPermissions()
+                .setShouldAllowContactsPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_contacts_permissions)).perform(scrollTo(), click());
         {
-            assertTrue(PermissionsManager.get()
-                                         .isContactsGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isContactsNeverAskAgain(), is(true));
+            onView(withId(R.id.contacts_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.contacts_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.contacts_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_contacts() throws Exception {
-        onView(withId(R.id.button_contacts_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_contacts_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_contacts_permissions)).perform(scrollTo(), click());
         {
             assertFalse(PermissionsManager.get()
-                                          .isContactsGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isContactsNeverAskAgain(), is(false));
+                                .isContactsGranted());
+            onView(withId(R.id.contacts_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.contacts_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.contacts_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(READ_CONTACTS);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(READ_CONTACTS);
         onView(withId(R.id.button_contacts_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isContactsGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getContactsHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isContactsNeverAskAgain(), is(true));
+            onView(withId(R.id.contacts_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.contacts_permissions_has_asked)).check(matches(withText("Yes")));
+            synchronized (this) {
+                wait(100);
+            }
+            onView(withId(R.id.contacts_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
@@ -586,108 +383,68 @@ public class MainActivityTest {
 
     @Test
     public void correct_ui_for_calling() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCallingNeverAskAgain(), is(false));
+            onView(withId(R.id.calling_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calling_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.calling_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_calling_permission() throws Exception {
-        onView(withId(R.id.button_calling_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calling_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_calling_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCallingNeverAskAgain(), is(false));
+            onView(withId(R.id.calling_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calling_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calling_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_calling_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowCallingPermission(true);
-        onView(withId(R.id.button_calling_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calling_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getMockSystemPermissions()
+                .setShouldAllowCallingPermission(true);
+        mActivityRule.launchActivity(null);
+
+        onView(withId(R.id.button_calling_permissions)).perform(scrollTo(), click());
         {
             assertTrue(PermissionsManager.get()
-                                         .isCallingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingPermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCallingNeverAskAgain(), is(true));
+                               .isPhoneGranted());
+            onView(withId(R.id.calling_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.calling_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calling_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_calling() throws Exception {
-        onView(withId(R.id.button_calling_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_calling_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_calling_permissions)).perform(scrollTo(), click());
         {
             assertFalse(PermissionsManager.get()
-                                          .isCallingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCallingNeverAskAgain(), is(false));
+                                .isPhoneGranted());
+            onView(withId(R.id.calling_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calling_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.calling_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(CALL_PHONE);
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(CALL_PHONE);
         onView(withId(R.id.button_calling_permissions)).perform(click());
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
         {
-            assertFalse(PermissionsManager.get()
-                                          .isCallingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingPermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getCallingHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isCallingNeverAskAgain(), is(true));
+            onView(withId(R.id.calling_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.calling_permissions_has_asked)).check(matches(withText("Yes")));
+            synchronized (this) {
+                wait(100);
+            }
+            onView(withId(R.id.calling_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
@@ -695,108 +452,197 @@ public class MainActivityTest {
 
     @Test
     public void correct_ui_for_storage() throws Exception {
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStoragePermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStorageHasAsked(), is("No"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isStorageNeverAskAgain(), is(false));
+            onView(withId(R.id.storage_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.storage_permissions_has_asked)).check(matches(withText("No")));
+            onView(withId(R.id.storage_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_denying_storage_permission() throws Exception {
-        onView(withId(R.id.button_storage_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_storage_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_storage_permissions)).perform(scrollTo(), click());
         {
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStoragePermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStorageHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isStorageNeverAskAgain(), is(false));
+            onView(withId(R.id.storage_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.storage_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.storage_permissions_never_again)).check(matches(withText("No")));
         }
     }
 
     @Test
     public void clicking_button_and_allowing_storage_permission() throws Exception {
         PermissionsManager.get()
-                          .getMockSystemPermissions()
-                          .setShouldAllowStoragePermission(true);
+                .getMockSystemPermissions()
+                .setShouldAllowStoragePermission(true);
+        mActivityRule.launchActivity(null);
+
         onView(withId(R.id.button_storage_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_storage_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+                .perform(scrollTo(), click());
         {
-            assertTrue(PermissionsManager.get()
-                                         .isStorageGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStoragePermissionStatus(), is("Given!!!"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStorageHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isStorageNeverAskAgain(), is(true));
+            onView(withId(R.id.storage_permissions_status)).check(matches(withText("Given!!!")));
+            onView(withId(R.id.storage_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.storage_permissions_never_again)).check(matches(withText("Yes")));
         }
     }
 
     @Test
     public void clicking_button_and_setting_never_ask_storage() throws Exception {
-        onView(withId(R.id.button_storage_permissions))
-                .perform(scrollTo());
-        onView(withId(R.id.button_storage_permissions)).perform(click());
-        mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
+        mActivityRule.launchActivity(null);
+
+        onView(withId(R.id.button_storage_permissions)).perform(scrollTo(), click());
         {
+
             assertFalse(PermissionsManager.get()
-                                          .isStorageGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStoragePermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStorageHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isStorageNeverAskAgain(), is(false));
+                                .isStorageGranted());
+            onView(withId(R.id.storage_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.storage_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.storage_permissions_never_again)).check(matches(withText("No")));
         }
 
-        PermissionsManager.get().getMockSystemPermissions().neverAskAgain(WRITE_EXTERNAL_STORAGE);
-        onView(withId(R.id.button_storage_permissions)).perform(click());
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(WRITE_EXTERNAL_STORAGE);
         mActivityRule.getActivity()
-                     .getPermissionsManagerStatus()
-                     .updateStatus(); // fake onResume
-        {
-            assertFalse(PermissionsManager.get()
-                                          .isCallingGranted());
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStoragePermissionStatus(), is("Not given"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .getStorageHasAsked(), is("Yes"));
-            assertThat(mActivityRule.getActivity()
-                                    .getPermissionsManagerStatus()
-                                    .isStorageNeverAskAgain(), is(true));
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
+        onView(withId(R.id.button_storage_permissions)).perform(click());
+        onView(withId(R.id.storage_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.storage_permissions_has_asked)).check(matches(withText("Yes")));
+        synchronized (this) {
+            wait(100);
         }
+        onView(withId(R.id.storage_permissions_never_again)).check(matches(withText("Yes")));
+    }
+
+    // ===== BODY SENSOR ================================================================================
+
+    @Test
+    public void correct_ui_for_body_sensor() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_body_sensor_permission)).perform(scrollTo())
+                .check(matches(withText(
+                        "Request Body Sensor Permission")));
+        onView(withId(R.id.body_sensor_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.body_sensor_permissions_has_asked)).check(matches(withText("No")));
+        onView(withId(R.id.body_sensor_permissions_never_again)).check(matches(withText("No")));
+    }
+
+    @Test
+    public void clicking_button_and_denying_body_sensor_permission() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_body_sensor_permission)).perform(scrollTo(), click());
+
+        onView(withId(R.id.body_sensor_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.body_sensor_permissions_has_asked)).check(matches(withText("Yes")));
+        onView(withId(R.id.body_sensor_permissions_never_again)).check(matches(withText("No")));
+    }
+
+    @Test
+    public void clicking_button_and_allowing_body_sensor_permission() throws Exception {
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .setShouldAllowBodySensorsPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_body_sensor_permission)).perform(scrollTo(), click());
+        onView(withId(R.id.body_sensor_permissions_status)).check(matches(withText("Given!!!")));
+        onView(withId(R.id.body_sensor_permissions_has_asked)).check(matches(withText("Yes")));
+        onView(withId(R.id.body_sensor_permissions_never_again)).check(matches(withText("Yes")));
+    }
+
+    @SuppressWarnings("NewApi")
+    @Test
+    public void clicking_button_and_setting_never_ask_body_sensor() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_body_sensor_permission)).perform(scrollTo(), click());
+        {
+
+            assertFalse(PermissionsManager.get()
+                                .isBodySensorGranted());
+            onView(withId(R.id.body_sensor_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.body_sensor_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.body_sensor_permissions_never_again)).check(matches(withText("No")));
+        }
+
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(BODY_SENSORS);
+        mActivityRule.getActivity()
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
+        onView(withId(R.id.button_body_sensor_permission)).perform(click());
+        onView(withId(R.id.body_sensor_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.body_sensor_permissions_has_asked)).check(matches(withText("Yes")));
+        synchronized (this) {
+            wait(100);
+        }
+        onView(withId(R.id.body_sensor_permissions_never_again)).check(matches(withText("Yes")));
+    }
+
+    // ===== SMS ================================================================================
+
+    @Test
+    public void correct_ui_for_sms() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_sms_permissions)).perform(scrollTo())
+                .check(matches(withText(
+                        "Request SMS Permission")));
+        onView(withId(R.id.sms_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.sms_permissions_has_asked)).check(matches(withText("No")));
+        onView(withId(R.id.sms_permissions_never_again)).check(matches(withText("No")));
+    }
+
+    @Test
+    public void clicking_button_and_denying_sms_permission() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_sms_permissions)).perform(scrollTo(), click());
+
+        onView(withId(R.id.sms_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.sms_permissions_has_asked)).check(matches(withText("Yes")));
+        onView(withId(R.id.sms_permissions_never_again)).check(matches(withText("No")));
+    }
+
+    @Test
+    public void clicking_button_and_allowing_sms_permission() throws Exception {
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .setShouldAllowSmsPermission(true);
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_sms_permissions)).perform(scrollTo(), click());
+        onView(withId(R.id.sms_permissions_status)).check(matches(withText("Given!!!")));
+        onView(withId(R.id.sms_permissions_has_asked)).check(matches(withText("Yes")));
+        synchronized (this) {
+            wait(100);
+        }
+        onView(withId(R.id.sms_permissions_never_again)).check(matches(withText("Yes")));
+    }
+
+    @Test
+    public void clicking_button_and_setting_never_ask_sms() throws Exception {
+        mActivityRule.launchActivity(null);
+        onView(withId(R.id.button_sms_permissions)).perform(scrollTo(), click());
+        {
+
+            assertFalse(PermissionsManager.get()
+                                .isSmsGranted());
+            onView(withId(R.id.sms_permissions_status)).check(matches(withText("Not given")));
+            onView(withId(R.id.sms_permissions_has_asked)).check(matches(withText("Yes")));
+            onView(withId(R.id.sms_permissions_never_again)).check(matches(withText("No")));
+        }
+
+        PermissionsManager.get()
+                .getMockSystemPermissions()
+                .neverAskAgain(SEND_SMS);
+        mActivityRule.getActivity()
+                .getPermissionsManagerStatus()
+                .updateStatus(); // fake onResume
+        onView(withId(R.id.button_sms_permissions)).perform(scrollTo(), click());
+        onView(withId(R.id.sms_permissions_status)).check(matches(withText("Not given")));
+        onView(withId(R.id.sms_permissions_has_asked)).check(matches(withText("Yes")));
+        synchronized (this) {
+            wait(100);
+        }
+        onView(withId(R.id.sms_permissions_never_again)).check(matches(withText("Yes")));
     }
 }
