@@ -173,6 +173,10 @@ public class PermissionsManager {
         return Collections.singletonList(CAMERA);
     }
 
+    /**
+     * Request the CAMERA permission.
+     * @return Observable that will kick off CAMERA permission.
+     */
     public Observable<PermissionsResult> requestCameraPermission() {
         return requestPermissions(REQUEST_CAMERA_PERMISSION);
     }
@@ -259,7 +263,7 @@ public class PermissionsManager {
     }
 
     @VisibleForTesting
-    protected boolean isFineLocationGranted() {
+    private boolean isFineLocationGranted() {
         if (isTestEnvironment()) {
             return mMockSystemPermissions.checkSelfPermission(ACCESS_FINE_LOCATION);
         }
@@ -269,7 +273,7 @@ public class PermissionsManager {
     }
 
     @VisibleForTesting
-    protected boolean isCoarseLocationGranted() {
+    private boolean isCoarseLocationGranted() {
         if (isTestEnvironment()) {
             return mMockSystemPermissions.checkSelfPermission(ACCESS_COARSE_LOCATION);
         }
@@ -285,6 +289,10 @@ public class PermissionsManager {
         return perms;
     }
 
+    /**
+     * Request the LOCATION permission.
+     * @return Observable that will kick off LOCATION permission.
+     */
     public Observable<PermissionsResult> requestLocationPermission() {
         return requestPermissions(REQUEST_LOCATION_PERMISSION);
     }
@@ -298,7 +306,7 @@ public class PermissionsManager {
     }
 
     @VisibleForTesting
-    protected boolean shouldShowLocationRationale(@NonNull Fragment fragment) {
+    boolean shouldShowLocationRationale(@NonNull Fragment fragment) {
         return (!isLocationGranted()
                 && shouldShowRequestPermissionRationale(fragment, ACCESS_FINE_LOCATION)
                 && shouldShowRequestPermissionRationale(fragment, ACCESS_COARSE_LOCATION));
@@ -350,6 +358,10 @@ public class PermissionsManager {
         return Collections.singletonList(RECORD_AUDIO);
     }
 
+    /**
+     * Request the MICROPHONE permission.
+     * @return Observable that will kick off MICROPHONE permission.
+     */
     public Observable<PermissionsResult> requestMicrophonePermission() {
         return requestPermissions(REQUEST_MICROPHONE_PERMISSION);
     }
@@ -418,6 +430,10 @@ public class PermissionsManager {
                 == PERMISSION_GRANTED;
     }
 
+    /**
+     * Request the CALENDAR permission.
+     * @return Observable that will kick off CALENDAR permission.
+     */
     private List<String> getCalendarPermissions() {
         final List<String> perms = new ArrayList<>();
         perms.add(READ_CALENDAR);
@@ -517,6 +533,10 @@ public class PermissionsManager {
         return perms;
     }
 
+    /**
+     * Request the CONTACTS permission.
+     * @return Observable that will kick off CONTACTS permission.
+     */
     public Observable<PermissionsResult> requestContactsPermission() {
         return requestPermissions(REQUEST_CONTACTS_PERMISSION);
     }
@@ -666,6 +686,10 @@ public class PermissionsManager {
         return perms;
     }
 
+    /**
+     * Request the PHONE permission.
+     * @return Observable that will kick off PHONE permission.
+     */
     public Observable<PermissionsResult> requestPhonePermission() {
         return requestPermissions(REQUEST_PHONE_PERMISSION);
     }
@@ -679,7 +703,7 @@ public class PermissionsManager {
     }
 
     @VisibleForTesting
-    protected boolean shouldShowRequestPhoneRationale(@NonNull Fragment fragment) {
+    boolean shouldShowRequestPhoneRationale(@NonNull Fragment fragment) {
         return !isOnePhoneGranted()
                 && shouldShowRequestPermissionRationale(fragment, READ_PHONE_STATE)
                 && shouldShowRequestPermissionRationale(fragment, CALL_PHONE)
@@ -762,6 +786,10 @@ public class PermissionsManager {
         return perms;
     }
 
+    /**
+     * Request the STORAGE permission.
+     * @return Observable that will kick off STORAGE permission.
+     */
     public Observable<PermissionsResult> requestStoragePermission() {
         return requestPermissions(REQUEST_STORAGE_PERMISSION);
     }
@@ -828,6 +856,10 @@ public class PermissionsManager {
         return Collections.singletonList(BODY_SENSORS);
     }
 
+    /**
+     * Request the BODY SENSOR permission.
+     * @return Observable that will kick off BODY SENSOR permission.
+     */
     public Observable<PermissionsResult> requestBodySensorPermission() {
         return requestPermissions(REQUEST_BODY_SENSOR_PERMISSION);
     }
@@ -947,6 +979,10 @@ public class PermissionsManager {
         return perms;
     }
 
+    /**
+     * Request the SMS permission.
+     * @return Observable that will kick off SMS permission.
+     */
     public Observable<PermissionsResult> requestSmsPermission() {
         return requestPermissions(REQUEST_SMS_PERMISSION);
     }
