@@ -24,11 +24,17 @@
     <string name="request_calling_permissions">Request Calling Permission</string>
     <string name="calling_permission">Calling Permission</string>
     <string name="request_storage_permission">Request Storage Permission</string>
+    <string name="request_body_sensor_permission">Request Body Sensor Permission</string>
+    <string name="request_sms_permission">Request SMS Permission</string>
     <string name="storage_permission">Storage Permission</string>
+    <string name="body_sensors_permission">Body Sensors Permission</string>
+    <string name="sms_permission">SMS Permission</string>
     <string name="location_granted_dont_ask">Location is granted, don\'t ask again!</string>
     <string name="audio_granted_dont_ask">Audio is granted, don\'t ask again!</string>
     <string name="calendar_granted_dont_ask">Calendar is granted, don\'t ask again!</string>
     <string name="contacts_granted_dont_ask">Contacts is granted, don\'t ask again!</string>
     <string name="calling_granted_dont_ask">Calling is granted, don\'t ask again!</string>
     <string name="storage_granted_dont_ask">Storage is granted, don\'t ask again!</string>
+    <string name="body_sensor_granted_dont_ask">Body Sensor is granted, don\'t ask again!</string>
+    <string name="sms_granted_dont_ask">SMS is granted, don\'t ask again!</string>
 </resources>

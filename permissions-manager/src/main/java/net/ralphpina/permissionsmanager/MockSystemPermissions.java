@@ -1,7 +1,7 @@
 package net.ralphpina.permissionsmanager;
 
-import android.app.Activity;
-import android.content.pm.PackageManager;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BODY_SENSORS;
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.GET_ACCOUNTS;
@@ -19,6 +20,7 @@ import static android.Manifest.permission.READ_CALENDAR;
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_CONTACTS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -40,7 +42,7 @@ public class MockSystemPermissions {
         mPermissionRequestCount = new HashMap<>();
     }
 
-    protected boolean checkSelfPermission(@NonNull String permission) {
+    boolean checkSelfPermission(@NonNull String permission) {
         return mPermissionsGranted.contains(permission);
     }
 
@@ -48,16 +50,12 @@ public class MockSystemPermissions {
         Collections.addAll(mPermissionsNeverAskAgain, permissions);
     }
 
-    protected void okToAskAgain(@NonNull String permission) {
-        mPermissionsNeverAskAgain.remove(permission);
-    }
-
-    protected boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
+    boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
         Integer permissionCount = mPermissionRequestCount.get(permission);
         return !mPermissionsNeverAskAgain.contains(permission) && permissionCount != null && permissionCount > 0;
     }
 
-    public void requestPermissions(String[] permissions) {
+    void requestPermissions(String[] permissions) {
         for (String permission : permissions) {
             markPermissionRequest(permission);
             if (mPermissionsOkToGrant.contains(permission)) {
@@ -66,12 +64,7 @@ public class MockSystemPermissions {
         }
     }
 
-    public void requestPermissions(Activity activity, String[] permissions, int requestCode) {
-        requestPermissions(permissions);
-        final int[] grantResults = getPermissionsGranted(permissions);
-    }
-
-    public void markPermissionRequest(String permission) {
+    private void markPermissionRequest(String permission) {
         if (mPermissionRequestCount.containsKey(permission)) {
             Integer value = mPermissionRequestCount.get(permission);
             if (value == null) {
@@ -84,21 +77,9 @@ public class MockSystemPermissions {
         }
     }
 
-    private int[] getPermissionsGranted(@NonNull String[] permissions) {
-        final int[] grantResults = new int[permissions.length];
-        for (int i = 0; i < permissions.length; i++) {
-            if (checkSelfPermission(permissions[i])) {
-                grantResults[i] = PackageManager.PERMISSION_GRANTED;
-            } else {
-                grantResults[i] = PackageManager.PERMISSION_DENIED;
-            }
-        }
-        return grantResults;
-    }
-
     // ---- CAMERA TEST HELPERS --------------------------------------------------------------------
 
-    public void setIsCameraGranted(boolean isCameraGranted) {
+    void setIsCameraGranted(boolean isCameraGranted) {
         if (isCameraGranted) {
             mPermissionsGranted.add(CAMERA);
         } else {
@@ -116,7 +97,7 @@ public class MockSystemPermissions {
 
     // ---- AUDIO TEST HELPERS ---------------------------------------------------------------------
 
-    public void setIsAudioRecordingGranted(boolean isAudioRecordingGranted) {
+    void setIsAudioRecordingGranted(boolean isAudioRecordingGranted) {
         if (isAudioRecordingGranted) {
             mPermissionsGranted.add(RECORD_AUDIO);
         } else {
@@ -134,7 +115,7 @@ public class MockSystemPermissions {
 
     // ---- LOCATION TEST HELPERS ------------------------------------------------------------------
 
-    public void setIsLocationGranted(boolean isLocationGranted) {
+    void setIsLocationGranted(boolean isLocationGranted) {
         if (isLocationGranted) {
             mPermissionsGranted.add(ACCESS_FINE_LOCATION);
             mPermissionsGranted.add(ACCESS_COARSE_LOCATION);
@@ -156,7 +137,7 @@ public class MockSystemPermissions {
 
     // ---- CALENDAR TEST HELPERS ------------------------------------------------------------------
 
-    public void setIsCalendarGranted(boolean isLocationGranted) {
+    void setIsCalendarGranted(boolean isLocationGranted) {
         if (isLocationGranted) {
             mPermissionsGranted.add(READ_CALENDAR);
         } else {
@@ -174,7 +155,7 @@ public class MockSystemPermissions {
 
     // ---- CONTACTS TEST HELPERS ------------------------------------------------------------------
 
-    public void setIsContactsGranted(boolean isContactsGranted) {
+    void setIsContactsGranted(boolean isContactsGranted) {
         if (isContactsGranted) {
             mPermissionsGranted.add(READ_CONTACTS);
             mPermissionsGranted.add(WRITE_CONTACTS);
@@ -200,7 +181,7 @@ public class MockSystemPermissions {
 
     // ---- CALLING TEST HELPERS -------------------------------------------------------------------
 
-    public void setIsCallingGranted(boolean isCallingGranted) {
+    void setIsCallingGranted(boolean isCallingGranted) {
         if (isCallingGranted) {
             mPermissionsGranted.add(CALL_PHONE);
         } else {
@@ -218,7 +199,7 @@ public class MockSystemPermissions {
 
     // ---- STORAGE TEST HELPERS ------------------------------------------------------------------
 
-    public void setIsStorageGranted(boolean isWriteStorageGranted) {
+    void setIsStorageGranted(boolean isWriteStorageGranted) {
         if (isWriteStorageGranted) {
             mPermissionsGranted.add(WRITE_EXTERNAL_STORAGE);
             mPermissionsGranted.add(READ_EXTERNAL_STORAGE);
@@ -238,7 +219,41 @@ public class MockSystemPermissions {
         }
     }
 
-    public void setPermissionsGranted(String permissionsGranted) {
-        mPermissionsGranted.add(permissionsGranted);
+    // ---- BODY SENSORS TEST HELPERS --------------------------------------------------------------
+
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+    void setIsBodySensorsGranted(boolean isBodySensorsGranted) {
+        if (isBodySensorsGranted) {
+            mPermissionsGranted.add(BODY_SENSORS);
+        } else {
+            mPermissionsGranted.remove(BODY_SENSORS);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+    public void setShouldAllowBodySensorsPermission(boolean shouldAllowBodySensorsPermission) {
+        if (shouldAllowBodySensorsPermission) {
+            mPermissionsOkToGrant.add(BODY_SENSORS);
+        } else {
+            mPermissionsOkToGrant.remove(BODY_SENSORS);
+        }
+    }
+
+    // ---- SMS TEST HELPERS -----------------------------------------------------------------------
+
+    void setIsSmsGranted(boolean isSmsGranted) {
+        if (isSmsGranted) {
+            mPermissionsGranted.add(SEND_SMS);
+        } else {
+            mPermissionsGranted.remove(SEND_SMS);
+        }
+    }
+
+    public void setShouldAllowSmsPermission(boolean shouldAllowSmsPermission) {
+        if (shouldAllowSmsPermission) {
+            mPermissionsOkToGrant.add(SEND_SMS);
+        } else {
+            mPermissionsOkToGrant.remove(SEND_SMS);
+        }
     }
 }

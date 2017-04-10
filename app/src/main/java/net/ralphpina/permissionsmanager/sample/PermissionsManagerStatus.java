@@ -2,6 +2,7 @@ package net.ralphpina.permissionsmanager.sample;
 
 import android.app.Activity;
 import android.databinding.BaseObservable;
+import android.os.Build;
 
 import net.ralphpina.permissionsmanager.PermissionsManager;
 
@@ -9,8 +10,6 @@ import net.ralphpina.permissionsmanager.PermissionsManager;
  * This class simply wraps {@link PermissionsManager} to use Android's Data Bindings
  */
 public class PermissionsManagerStatus extends BaseObservable {
-
-    private static final String TAG = "PermissionManagerStatus";
 
     private final Activity mActivity;
 
@@ -24,7 +23,7 @@ public class PermissionsManagerStatus extends BaseObservable {
     private       String   locationHasAsked;
     private       boolean  locationNeverAskAgain;
 
-    // Audio
+    // Microphone
     private       String   audioPermissionStatus;
     private       String   audioHasAsked;
     private       boolean  audioNeverAskAgain;
@@ -39,7 +38,7 @@ public class PermissionsManagerStatus extends BaseObservable {
     private       String   contactsHasAsked;
     private       boolean  contactsNeverAskAgain;
 
-    // Calling
+    // Phone
     private       String   callingPermissionStatus;
     private       String   callingHasAsked;
     private       boolean  callingNeverAskAgain;
@@ -49,108 +48,152 @@ public class PermissionsManagerStatus extends BaseObservable {
     private       String   storageHasAsked;
     private       boolean  storageNeverAskAgain;
 
-    public PermissionsManagerStatus(Activity activity) {
+    // Body Sensors
+    private       String   bodySensorPermissionStatus;
+    private       String   bodySensorHasAsked;
+    private       boolean  bodySensorNeverAskAgain;
+
+    // SMS
+    private       String   smsPermissionStatus;
+    private       String   smsHasAsked;
+    private       boolean  smsNeverAskAgain;
+
+    PermissionsManagerStatus(Activity activity) {
         mActivity = activity;
     }
 
-    public void updateStatus() {
+    void updateStatus() {
         // Camera
         this.cameraPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isCameraGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isCameraGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.cameraHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForCameraPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForCameraPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.cameraNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForCamera(mActivity);
+                .neverAskForCamera(mActivity);
 
         // Location
         this.locationPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isLocationGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isLocationGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.locationHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForLocationPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForLocationPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.locationNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForLocation(mActivity);
+                .neverAskForLocation(mActivity);
 
         // Audio
         this.audioPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isAudioRecordingGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isMicrophoneGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.audioHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForAudioRecordingPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForMicrophonePermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.audioNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForAudio(mActivity);
+                .neverAskForMicrophone(mActivity);
 
         // Calendar
         this.calendarPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isCalendarGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isCalendarGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.calendarHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForCalendarPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForCalendarPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.calendarNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForCalendar(mActivity);
+                .neverAskForCalendar(mActivity);
 
         // Contacts
         this.contactsPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isContactsGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isContactsGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.contactsHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForContactsPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForContactsPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.contactsNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForContacts(mActivity);
+                .neverAskForContacts(mActivity);
 
         // Calling
         this.callingPermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isCallingGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isPhoneGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.callingHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForCallingPermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForPhonePermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.callingNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForCalling(mActivity);
+                .neverAskForPhone(mActivity);
 
         // Storage
         this.storagePermissionStatus = PMApplication.get()
-                                                   .getString(PermissionsManager.get()
-                                                                                .isStorageGranted()
-                                                              ? R.string.given
-                                                              : R.string.not_given);
+                .getString(PermissionsManager.get()
+                                   .isStorageGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
         this.storageHasAsked = PMApplication.get()
-                                           .getString(PermissionsManager.get()
-                                                                        .hasAskedForStoragePermission()
-                                                      ? R.string.yes
-                                                      : R.string.no);
+                .getString(PermissionsManager.get()
+                                   .hasAskedForStoragePermission()
+                                   ? R.string.yes
+                                   : R.string.no);
         this.storageNeverAskAgain = PermissionsManager.get()
-                                                     .neverAskForStorage(mActivity);
+                .neverAskForStorage(mActivity);
+
+        // Body Sensor
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            this.bodySensorPermissionStatus = PMApplication.get()
+                    .getString(PermissionsManager.get()
+                                       .isBodySensorGranted()
+                                       ? R.string.given
+                                       : R.string.not_given);
+        } else {
+            this.bodySensorPermissionStatus = PMApplication.get()
+                    .getString(R.string.not_given);
+        }
+
+        this.bodySensorHasAsked = PMApplication.get()
+                .getString(PermissionsManager.get()
+                                   .hasAskedForBodySensorPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
+        this.bodySensorNeverAskAgain = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && PermissionsManager.get()
+                .neverAskForBodySensor(mActivity);
+
+        // SMS
+        this.smsPermissionStatus = PMApplication.get()
+                .getString(PermissionsManager.get()
+                                   .isSmsGranted()
+                                   ? R.string.given
+                                   : R.string.not_given);
+        this.smsHasAsked = PMApplication.get()
+                .getString(PermissionsManager.get()
+                                   .hasAskedForSmsPermission()
+                                   ? R.string.yes
+                                   : R.string.no);
+        this.smsNeverAskAgain = PermissionsManager.get()
+                .neverAskForSms(mActivity);
 
         notifyChange();
     }
@@ -383,5 +426,69 @@ public class PermissionsManagerStatus extends BaseObservable {
 
     public void setStorageNeverAskAgain(boolean storageNeverAskAgain) {
         this.storageNeverAskAgain = storageNeverAskAgain;
+    }
+
+    // ===== BOBY SENSORS ==========================================================================
+
+    // ----- Permission Status ---------------------------------------------------------------------
+
+    public String getBodySensorPermissionStatus() {
+        return bodySensorPermissionStatus;
+    }
+
+    public void setBodySensorPermissionStatus(String bodySensorPermissionStatus) {
+        this.bodySensorPermissionStatus = bodySensorPermissionStatus;
+    }
+
+    // ----- Has Asked -----------------------------------------------------------------------------
+
+    public String getBodySensorHasAsked() {
+        return bodySensorHasAsked;
+    }
+
+    public void setBodySensorHasAsked(String bodySensorHasAsked) {
+        this.bodySensorHasAsked = bodySensorHasAsked;
+    }
+
+    // ----- Never Ask Again -----------------------------------------------------------------------
+
+    public boolean isBodySensorNeverAskAgain() {
+        return bodySensorNeverAskAgain;
+    }
+
+    public void setBodySensorNeverAskAgain(boolean bodySensorNeverAskAgain) {
+        this.bodySensorNeverAskAgain = bodySensorNeverAskAgain;
+    }
+
+    // ===== SMS ===================================================================================
+
+    // ----- Permission Status ---------------------------------------------------------------------
+
+    public String getSmsPermissionStatus() {
+        return smsPermissionStatus;
+    }
+
+    public void setSmsPermissionStatus(String smsPermissionStatus) {
+        this.smsPermissionStatus = smsPermissionStatus;
+    }
+
+    // ----- Has Asked -----------------------------------------------------------------------------
+
+    public String getSmsHasAsked() {
+        return smsHasAsked;
+    }
+
+    public void setSmsHasAsked(String smsHasAsked) {
+        this.smsHasAsked = smsHasAsked;
+    }
+
+    // ----- Never Ask Again -----------------------------------------------------------------------
+
+    public boolean isSmsNeverAskAgain() {
+        return smsNeverAskAgain;
+    }
+
+    public void setSmsNeverAskAgain(boolean smsNeverAskAgain) {
+        this.smsNeverAskAgain = smsNeverAskAgain;
     }
 }

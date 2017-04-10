@@ -71,6 +71,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/camera_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -96,6 +97,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/camera_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -121,6 +123,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/camera_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -179,6 +182,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/location_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -204,6 +208,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/location_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -229,6 +234,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/location_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -287,6 +293,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/audio_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -312,6 +319,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/audio_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -337,6 +345,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/audio_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -395,6 +404,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calendar_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -420,6 +430,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calendar_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -445,6 +456,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calendar_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -503,6 +515,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/contacts_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -528,6 +541,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/contacts_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -553,6 +567,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/contacts_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -611,6 +626,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calling_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -636,6 +652,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calling_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -661,6 +678,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/calling_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -719,6 +737,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/storage_permissions_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -744,6 +763,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/storage_permissions_has_asked"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -769,6 +789,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:id="@+id/storage_permissions_never_again"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
@@ -802,6 +823,228 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text="@string/request_storage_permission"/>
+
+                <!--Body Sensors-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/body_sensors_permission"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/permission_status"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/body_sensor_permissions_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.bodySensorPermissionStatus}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/has_asked"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/body_sensor_permissions_has_asked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.bodySensorHasAsked}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/never_ask_again"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/body_sensor_permissions_never_again"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.bodySensorNeverAskAgain ? @string/yes : @string/no}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                    <Button
+                        android:id="@+id/button_go_to_permissions_body_sensor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:text="@string/go_to_app_permissions"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="@{permissions.bodySensorNeverAskAgain ? View.VISIBLE : View.GONE}"
+                        />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_body_sensor_permission"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/request_body_sensor_permission"/>
+
+                <!--SMS-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/sms_permission"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/permission_status"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/sms_permissions_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.smsPermissionStatus}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/has_asked"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/sms_permissions_has_asked"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.smsHasAsked}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/never_ask_again"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/sms_permissions_never_again"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:text="@{permissions.smsNeverAskAgain ? @string/yes : @string/no}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"/>
+
+                    <Button
+                        android:id="@+id/button_go_to_permissions_sms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:text="@string/go_to_app_permissions"
+                        android:textAllCaps="false"
+                        android:textColor="@color/blue"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:visibility="@{permissions.smsNeverAskAgain ? View.VISIBLE : View.GONE}"
+                        />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button_sms_permissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/request_sms_permission"/>
 
             </LinearLayout>
         </ScrollView>

@@ -1,18 +1,32 @@
 # Android Permissions Manager
-Easily manage Android Marshmallow and up runtime permissions.
+Easily manage Android Marshmallow and up runtime permissions. This library uses RXJava to skip all the painful parts of the `Activity`/`Fragment` lifecycle management.
+
+### Checking Permissions
+
+```java
+PermissionsManager.get()
+      .requestCameraPermission()
+      .subscribe(new Action1<PermissionsResult>() {
+          @Override
+          public void call(PermissionsResult permissionsResult) {
+            if (permissionsResult.isGranted()) { // always true pre-M
+              // do whatever
+            }
+            if (permissionsResult.hasAskedForPermissions()) { // false if pre-M
+              // do whatever
+            }
+          }
+      });
+```
 
 This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given. This is done using the Android Support library ```ActivityCompat``` and support ```Fragment``` methods for permissions. I've tried to make sure this library is well tested.
 
 Javadocs can be found in the [docs](/docs) folder.
 
 # Including Library
-Simply imported it into your gradle project like so:
+JCenter is a pain to maintan, so I use [Jitpack.io](https://jitpack.io).
 
-```groovy
-compile 'net.ralphpina.permissionsmanager:permissions-manager:1.0.0'
-```
-
-Or if you like using [Jitpack.io](https://jitpack.io) you can include it in your gradle file like so:
+You can include it in your gradle file like so:
 
 ```groovy
 repositories {
@@ -20,7 +34,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.ralphpina:Android-Permissions-Manager:v1.0.0'
+  compile 'com.github.ralphpina:Android-Permissions-Manager:v2.0.0'
 }
 ```
 
@@ -34,11 +48,10 @@ This library provides an interface to request ```PROTECTION_DANGEROUS``` Android
 - MICROPHONE
 - PHONE
 - STORAGE
+- BODY SENSORS
+- SMS
 
-See [Request Other Permissions](#request-other-permissions) to see how to use this library for permissions not listed above, namely:
-
-- SENSORS
-- SMS.
+See [Request Other Permissions](#request-other-permissions) to see how to use this library to request various permissions in different groups.
 
 The API allows you to check 3 things:
   1. Whether the permission has been granted.
@@ -86,20 +99,7 @@ Make sure to include whatever permissions you will need in the ```AndroidManifes
     ...
     
 </manifest>
-```
-
-### Checking ```onRequestPermissionsResult``` methods
-Below are the main methods, however, you can also check out the Javadocs. Normally, after asking for a permission all you need to do is check in ```onResume``` whether the user has given you the permission. Otherwise, you can check using the following request codes in the ```Activity.onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)``` or ```Fragment.onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)``` methods of your view controller.
-
-```java
-PermissionsManager.REQUEST_CAMERA_PERMISSION;
-PermissionsManager.REQUEST_LOCATION_PERMISSION;
-PermissionsManager.REQUEST_AUDIO_RECORDING_PERMISSION;
-PermissionsManager.REQUEST_CALENDAR_PERMISSION;
-PermissionsManager.REQUEST_CONTACTS_PERMISSION;
-PermissionsManager.REQUEST_STORAGE_PERMISSION;
-PermissionsManager.REQUEST_CALL_PHONE_PERMISSION;
-```
+```                
 
 ### Calendar
 
@@ -114,12 +114,6 @@ PermissionsManager.get()
 ```java
 PermissionsManager.get()
                   .neverAskForCalendar(mActivity);
-```
-
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestCalendarPermission(this);
 ```
 
 ### Camera
@@ -137,12 +131,6 @@ PermissionsManager.get()
                   .neverAskForCamera(mActivity);
 ```
 
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestCameraPermission(this);
-```
-
 ### Contacts
 
 ```java
@@ -156,12 +144,6 @@ PermissionsManager.get()
 ```java
 PermissionsManager.get()
                   .neverAskForContacts(mActivity);
-```
-
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestContactsPermission(this);
 ```
 
 ### Location
@@ -179,12 +161,6 @@ PermissionsManager.get()
                   .neverAskForLocation(mActivity);
 ```
 
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestLocationPermission(this);
-```
-
 ### Microphone
 
 ```java
@@ -198,12 +174,6 @@ PermissionsManager.get()
 ```java
 PermissionsManager.get()
                   .neverAskForAudio(mActivity);
-```
-
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestAudioRecordingPermission(this);
 ```
 
 ### Phone
@@ -221,12 +191,6 @@ PermissionsManager.get()
                   .neverAskForCalling(mActivity);
 ```
 
-Request the permission. ```this``` can be an Activity of support Fragment.
-```java
-PermissionsManager.get()
-                  .requestCallingPermission(this);
-```
-
 ### Storage
 
 ```java
@@ -242,10 +206,34 @@ PermissionsManager.get()
                   .neverAskForStorage(mActivity);
 ```
 
-Request the permission. ```this``` can be an Activity of support Fragment.
+### Body Sensors
+
 ```java
 PermissionsManager.get()
-                  .requestStoragePermission(this);
+                  .isBodySensorGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForBodySensorPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForBodySensor(mActivity);
+```
+
+### SMS
+
+```java
+PermissionsManager.get()
+                  .isSmsGranted()
+```
+```java
+PermissionsManager.get()
+                  .hasAskedForSmsPermission()
+```
+```java
+PermissionsManager.get()
+                  .neverAskForSms(mActivity);
 ```
 
 # Never Ask Again
@@ -258,18 +246,23 @@ PermissionsManager.get()
 
 **If the user selected "Never ask again", then they give you permissions in the app settings page, and then remove them, this method will return true. Even though at that point you can ask for permissions. I have not been able to figure out a way around this.**
 
-# Request Other Permissions
-While there are methods to request some of the more common permissions, if the one you need is not there you can still use this library to request it. The example below tries to request body sensors:
+# Requesting Multiple Permissions
+While there are methods to request some of the more common permissions, if you want to request multiple permissions at once:
 
 ```java
 PermissionsManager.get()
-                  .requestPermission(activity, REQUEST_CODE, BODY_SENSORS);
-```
-
-To call into the should show request permission rationale methods you can also use this library:
-```java
-PermissionsManager.get()
-                  .shouldShowRequestPermissionRationale(activity, BODY_SENSORS);
+      .requestPermissions(REQUEST_CAMERA_PERMISSION, REQUEST_LOCATION_PERMISSION)
+      .subscribe(new Action1<PermissionsResult>() {
+          @Override
+          public void call(PermissionsResult permissionsResult) {
+            if (permissionsResult.isGranted()) { // always true pre-M
+              // do whatever
+            }
+            if (permissionsResult.hasAskedForPermissions()) { // false if pre-M
+              // do whatever
+            }
+          }
+      });
 ```
 
 # Contributing
