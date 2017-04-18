@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-  compile 'com.github.ralphpina:Android-Permissions-Manager:v2.0.0'
+  compile 'com.github.ralphpina:Android-Permissions-Manager:v2.0.1'
 }
 ```
 
