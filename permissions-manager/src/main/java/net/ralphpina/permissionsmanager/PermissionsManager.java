@@ -1094,19 +1094,17 @@ public class PermissionsManager {
     // ==== PERMISSION REQUESTS ====================================================================
 
     @SuppressWarnings("WeakerAccess")
-    public PermissionsObservable requestPermissions(@Permission int... permissions) {
-        final Observable<PermissionsResult> o;
+    public Observable<PermissionsResult> requestPermissions(@Permission int... permissions) {
         if (checkPermissionsGranted(permissions)) {
-            o = Observable.just(new PermissionsResult(true, false));
+            return Observable.just(new PermissionsResult(true, false));
         } else {
             markPermissionsAsked(permissions);
             if (isTestEnvironment()) {
-                o = testRequestPermissions(getPermissionsToRequest(permissions));
+                return testRequestPermissions(getPermissionsToRequest(permissions));
             } else {
-                o = requestPermission(getPermissionsToRequest(permissions));
+                return requestPermission(getPermissionsToRequest(permissions));
             }
         }
-        return PermissionsObservable.from(o);
     }
 
     private boolean checkPermissionsGranted(@Permission int... permissions) {
