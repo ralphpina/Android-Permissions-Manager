@@ -1,8 +1,8 @@
 package net.ralphpina.permissionsmanager.sample
 
 import android.app.Application
-import net.ralphpina.permissionsmanager.PermissionsComponent
 import net.ralphpina.permissionsmanager.PermissionsManager
+import net.ralphpina.permissionsmanager.android.PermissionsComponent
 
 class PMApplication : Application() {
 

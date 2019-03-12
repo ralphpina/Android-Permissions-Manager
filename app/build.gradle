@@ -24,7 +24,8 @@ android {
 }
 
 dependencies {
-    implementation project(':permissions-manager')
+    implementation project(':permissions_manager')
+    implementation project(':permissions_manager_android')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 

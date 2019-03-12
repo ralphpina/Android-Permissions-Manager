@@ -1,1 +1,1 @@
-include ':app', ':permissions-manager'
+include ':app', ':permissions_manager', ':permissions_manager_android'
