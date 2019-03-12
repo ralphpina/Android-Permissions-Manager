@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import io.reactivex.Observable
 import io.reactivex.Single
 import net.ralphpina.permissionsmanager.foregroundutils.ForegroundUtilsComponent
-import net.ralphpina.permissionsmanager.foregroundutils.OnAppLifecycleEvent
 
 private const val PERMISSIONS_SHARED_PREFS_STORAGE = "permissions_shared_prefs_storage"
 
@@ -105,13 +104,7 @@ object PermissionsComponent {
                     permissionRationaleDelegate = permissionRationaleDelegate ?: AndroidPermissionRationaleDelegate(foregroundUtils)
             )
 
-            // we're intentionally leaking this subscription, since it will live for the lifetime of the app.
-            foregroundUtils.observe()
-                .doOnNext {
-                    if (it is OnAppLifecycleEvent.OnAppForegroundedEvent) {
-                        checkNotNull(_permissionsRepository).refreshPermissions()
-                    }
-                }.subscribe()
+            AppLifecycleObserver.init(checkNotNull(_permissionsRepository))
 
             return checkNotNull(_permissionsRepository as PermissionsManager)
         }

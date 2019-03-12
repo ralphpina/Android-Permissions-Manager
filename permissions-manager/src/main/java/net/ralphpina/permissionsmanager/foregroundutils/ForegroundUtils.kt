@@ -3,17 +3,10 @@ package net.ralphpina.permissionsmanager.foregroundutils
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import io.reactivex.Observable
-
-sealed class OnAppLifecycleEvent {
-    object OnAppForegroundedEvent : OnAppLifecycleEvent()
-    object OnAppBackgroundedEvent : OnAppLifecycleEvent()
-}
 
 interface ForegroundUtils {
     fun getForegroundedActivity(): Activity?
     fun getActivity(): Activity?
-    fun observe(): Observable<OnAppLifecycleEvent>
 }
 
 internal class ForegroundUtilsImpl(
@@ -24,8 +17,6 @@ internal class ForegroundUtilsImpl(
 
     override fun getActivity(): Activity? = activityRepository.foregroundedActivity
             ?: activityRepository.startedActivity ?: activityRepository.createdActivity
-
-    override fun observe(): Observable<OnAppLifecycleEvent> = activityRepository.observe()
 }
 
 object ForegroundUtilsComponent {
