@@ -37,4 +37,9 @@
     <string name="storage_granted_dont_ask">Storage is granted, don\'t ask again!</string>
     <string name="body_sensor_granted_dont_ask">Body Sensor is granted, don\'t ask again!</string>
     <string name="sms_granted_dont_ask">SMS is granted, don\'t ask again!</string>
+    <string name="settings">Settings</string>
+    <string name="requesting_permission_text">Request %s Permission</string>
+    <string name="status_title">Status:</string>
+    <string name="has_asked_title">Has asked?</string>
+    <string name="never_ask_again_title">Never ask again?</string>
 </resources>

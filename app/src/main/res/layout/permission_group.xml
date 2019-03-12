@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+		<variable
+				name="group"
+				type="java.lang.String"/>
+	</data>
+
+	<TextView
+			android:text="@{group}"
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="10dp"
+			android:textSize="24sp"
+			android:textStyle="bold"
+			tools:text="Camera">
+
+	</TextView>
+</layout>
