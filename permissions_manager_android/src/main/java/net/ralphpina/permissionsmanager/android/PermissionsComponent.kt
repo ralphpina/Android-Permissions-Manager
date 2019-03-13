@@ -49,7 +49,7 @@ object PermissionsComponent {
                 navigator = AndroidNavigator(c, foregroundUtils),
                 requestStatusRepository = RequestStatusRepositoryImpl(sharedPreferences),
                 permissionsService = AndroidPermissionsService(c),
-                permissionRationaleDelegate = AndroidPermissionRationaleDelegate(foregroundUtils)
+                permissionsRationaleDelegate = AndroidPermissionsRationaleDelegate(foregroundUtils)
             )
 
             AppLifecycleObserver.init(checkNotNull(_permissionsRepository))

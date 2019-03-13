@@ -10,12 +10,12 @@ interface PermissionsManager {
     /**
      * Observe the state of permissions. You will get notified when there's new changes to it.
      */
-    fun observe(vararg permissions: Permission): Observable<List<PermissionsResult>>
+    fun observe(vararg permissions: Permission): Observable<List<PermissionResult>>
 
     /**
      * Request a permission from the system. The Single will return the permissions result from the OS.
      */
-    fun request(vararg permissions: Permission): Single<List<PermissionsResult>>
+    fun request(vararg permissions: Permission): Single<List<PermissionResult>>
 
     /**
      * Navigate to your app's settings. Here the user can manually change permissions.

@@ -5,7 +5,7 @@
             android:label="@string/app_name"
             android:supportsRtl="true">
         <activity
-                android:name=".PermissionRequestActivity"
+                android:name=".PermissionsRequestActivity"
                 android:launchMode="singleTop"
                 android:theme="@style/Theme.AppCompat.Translucent"/>
     </application>

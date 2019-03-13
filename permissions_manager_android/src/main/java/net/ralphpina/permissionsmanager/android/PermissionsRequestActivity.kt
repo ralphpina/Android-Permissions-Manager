@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
-import net.ralphpina.permissionsmanager.*
+import net.ralphpina.permissionsmanager.Permission
+import net.ralphpina.permissionsmanager.PermissionResult
 
 /**
  * The sole purpose of this Activity is to request a permission so we can get the callback via the
@@ -18,7 +18,7 @@ import net.ralphpina.permissionsmanager.*
  * This activity is transparent, so there's no UI for the user.
  */
 @TargetApi(Build.VERSION_CODES.M)
-class PermissionRequestActivity : AppCompatActivity() {
+class PermissionsRequestActivity : AppCompatActivity() {
 
     private val permissionsRepository by lazy {
         PermissionsComponent.permissionsRepository
@@ -51,7 +51,7 @@ class PermissionRequestActivity : AppCompatActivity() {
             val permissionResults = permissions
                     .map { it.toPermission() }
                     .mapIndexed { index, permission ->
-                        PermissionsResult(
+                        PermissionResult(
                             permission,
                             grantResults[index] == PERMISSION_GRANTED,
                             true
@@ -69,7 +69,7 @@ class PermissionRequestActivity : AppCompatActivity() {
 
         @JvmStatic
         internal fun startActivity(context: Context, vararg permissions: String) =
-                with(Intent(context, PermissionRequestActivity::class.java)) {
+                with(Intent(context, PermissionsRequestActivity::class.java)) {
                     putExtra(PERMISSIONS_KEY, permissions)
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION
                     context.startActivity(this)

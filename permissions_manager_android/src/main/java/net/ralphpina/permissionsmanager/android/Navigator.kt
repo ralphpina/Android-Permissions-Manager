@@ -9,7 +9,7 @@ import net.ralphpina.permissionsmanager.android.foregroundutils.ForegroundUtils
 
 /**
  * Used to navigate to app settings and to our permissions requesting activity.
- * This is marked internal because we need to use [PermissionRequestActivity]
+ * This is marked internal because we need to use [PermissionsRequestActivity]
  * for the SDK to properly work.
  */
 internal interface Navigator {
@@ -23,7 +23,7 @@ internal class AndroidNavigator(
 ) : Navigator {
     override fun navigateToPermissionRequestActivity(permissions: List<Permission>) {
         val starter = foregroundUtils.getActivity() ?: context
-        PermissionRequestActivity.startActivity(
+        PermissionsRequestActivity.startActivity(
             starter,
             *permissions.map { it.value }.toTypedArray()
         )

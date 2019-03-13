@@ -3,7 +3,7 @@ package net.ralphpina.permissionsmanager.android
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
 import net.ralphpina.permissionsmanager.Permission
-import net.ralphpina.permissionsmanager.PermissionsResult
+import net.ralphpina.permissionsmanager.PermissionResult
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 
@@ -12,7 +12,7 @@ class PermissionsRepositoryImplTest {
     private lateinit var navigator: Navigator
     private lateinit var requestStatusRepository: RequestStatusRepository
     private lateinit var permissionsService: PermissionsService
-    private lateinit var permissionRationaleDelegate: PermissionRationaleDelegate
+    private lateinit var permissionsRationaleDelegate: PermissionsRationaleDelegate
 
     private lateinit var permissionRepository: PermissionsRepositoryImpl
 
@@ -21,13 +21,13 @@ class PermissionsRepositoryImplTest {
         navigator = mock()
         requestStatusRepository = mock()
         permissionsService = mock()
-        permissionRationaleDelegate = mock()
+        permissionsRationaleDelegate = mock()
 
         permissionRepository = PermissionsRepositoryImpl(
             navigator,
             requestStatusRepository,
             permissionsService,
-            permissionRationaleDelegate
+            permissionsRationaleDelegate
         )
     }
 
@@ -38,7 +38,7 @@ class PermissionsRepositoryImplTest {
             .assertNotTerminated()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = false,
                         hasAskedForPermissions = false
@@ -57,7 +57,7 @@ class PermissionsRepositoryImplTest {
             .assertNotTerminated()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
@@ -79,12 +79,12 @@ class PermissionsRepositoryImplTest {
             .assertNotTerminated()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
                     ),
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Fine,
                         isGranted = false,
                         hasAskedForPermissions = false
@@ -106,7 +106,7 @@ class PermissionsRepositoryImplTest {
             .assertComplete()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
@@ -186,12 +186,12 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
                     ),
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Fine,
                         isGranted = false,
                         hasAskedForPermissions = false
@@ -202,13 +202,13 @@ class PermissionsRepositoryImplTest {
         // let's pretend the system has granted this now
         whenever(permissionsService.checkPermission(Permission.Location.Fine)).thenReturn(true)
         whenever(requestStatusRepository.getHasAsked(Permission.Location.Fine)).thenReturn(true)
-        whenever(permissionRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Location.Fine)).thenReturn(
+        whenever(permissionsRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Location.Fine)).thenReturn(
             true
         )
 
         permissionRepository.update(
             listOf(
-                PermissionsResult(
+                PermissionResult(
                     Permission.Location.Fine,
                     isGranted = true,
                     hasAskedForPermissions = true
@@ -221,12 +221,12 @@ class PermissionsRepositoryImplTest {
             .assertValueAt(
                 1,
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
                     ),
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Fine,
                         isGranted = true,
                         hasAskedForPermissions = true
@@ -242,7 +242,7 @@ class PermissionsRepositoryImplTest {
 
         permissionRepository.update(
             listOf(
-                PermissionsResult(
+                PermissionResult(
                     Permission.Location.Fine,
                     isGranted = true,
                     hasAskedForPermissions = true
@@ -259,12 +259,12 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = false
                     ),
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Fine,
                         isGranted = false,
                         hasAskedForPermissions = false
@@ -285,7 +285,7 @@ class PermissionsRepositoryImplTest {
 
         permissionRepository.update(
             listOf(
-                PermissionsResult(
+                PermissionResult(
                     Permission.Location.Coarse,
                     isGranted = true,
                     hasAskedForPermissions = true
@@ -298,7 +298,7 @@ class PermissionsRepositoryImplTest {
             .assertComplete()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = true
@@ -319,7 +319,7 @@ class PermissionsRepositoryImplTest {
 
         permissionRepository.update(
             listOf(
-                PermissionsResult(
+                PermissionResult(
                     Permission.Location.Coarse,
                     isGranted = true,
                     hasAskedForPermissions = true
@@ -329,7 +329,7 @@ class PermissionsRepositoryImplTest {
 
         permissionRepository.update(
             listOf(
-                PermissionsResult(
+                PermissionResult(
                     Permission.Location.Coarse,
                     isGranted = true,
                     hasAskedForPermissions = true
@@ -342,7 +342,7 @@ class PermissionsRepositoryImplTest {
             .assertComplete()
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = true,
                         hasAskedForPermissions = true
@@ -363,7 +363,7 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Camera,
                         isGranted = true,
                         hasAskedForPermissions = true,
@@ -382,7 +382,7 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Camera,
                         isGranted = false,
                         hasAskedForPermissions = false,
@@ -396,7 +396,7 @@ class PermissionsRepositoryImplTest {
     @Test
     fun `GIVEN camera permission not granted and has asked and should show rationale WHEN observing THEN isMarkedAsDontAsk is false`() {
         whenever(requestStatusRepository.getHasAsked(Permission.Camera)).thenReturn(true)
-        whenever(permissionRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Camera)).thenReturn(true)
+        whenever(permissionsRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Camera)).thenReturn(true)
 
         permissionRepository.observe(Permission.Camera)
             .test()
@@ -404,7 +404,7 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Camera,
                         isGranted = false,
                         hasAskedForPermissions = true,
@@ -418,7 +418,7 @@ class PermissionsRepositoryImplTest {
     @Test
     fun `GIVEN camera permission not granted and has asked and should not show rationale WHEN observing THEN isMarkedAsDontAsk is true`() {
         whenever(requestStatusRepository.getHasAsked(Permission.Camera)).thenReturn(true)
-        whenever(permissionRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Camera)).thenReturn(false)
+        whenever(permissionsRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Camera)).thenReturn(false)
 
         permissionRepository.observe(Permission.Camera)
             .test()
@@ -426,7 +426,7 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Camera,
                         isGranted = false,
                         hasAskedForPermissions = true,
@@ -440,7 +440,7 @@ class PermissionsRepositoryImplTest {
     @Test
     fun `GIVEN fine location permission marked as don't ask WHEN observing coarse location THEN isMarkedAsDontAsk is true`() {
         whenever(requestStatusRepository.getHasAsked(Permission.Location.Fine)).thenReturn(true)
-        whenever(permissionRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Location.Fine)).thenReturn(
+        whenever(permissionsRationaleDelegate.shouldShowRequestPermissionRationale(Permission.Location.Fine)).thenReturn(
             false
         )
 
@@ -450,7 +450,7 @@ class PermissionsRepositoryImplTest {
             .assertValueCount(1)
             .assertValue(
                 listOf(
-                    PermissionsResult(
+                    PermissionResult(
                         Permission.Location.Coarse,
                         isGranted = false,
                         hasAskedForPermissions = false,

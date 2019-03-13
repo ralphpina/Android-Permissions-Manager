@@ -7,13 +7,13 @@ import net.ralphpina.permissionsmanager.android.foregroundutils.ForegroundUtils
 /**
  * Delegate to wrap the shouldShowRequestPermissionRationale call to the OS.
  */
-internal interface PermissionRationaleDelegate {
+internal interface PermissionsRationaleDelegate {
     fun shouldShowRequestPermissionRationale(permission: Permission): Boolean
 }
 
-internal class AndroidPermissionRationaleDelegate(
+internal class AndroidPermissionsRationaleDelegate(
     private val foregroundUtils: ForegroundUtils
-) : PermissionRationaleDelegate {
+) : PermissionsRationaleDelegate {
     override fun shouldShowRequestPermissionRationale(permission: Permission): Boolean {
         // in the event this gets called without an Activity, we will just return false
         val activity = foregroundUtils.getActivity() ?: return false

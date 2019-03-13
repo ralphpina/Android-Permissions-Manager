@@ -36,7 +36,7 @@ package net.ralphpina.permissionsmanager
  *
  * Take a look at [PermissionsRepositoryImpl] where this is currently being calculated.
  */
-data class PermissionsResult(
+data class PermissionResult(
     val permission: Permission,
     val isGranted: Boolean,
     val hasAskedForPermissions: Boolean,
