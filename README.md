@@ -56,9 +56,9 @@ Setting up the library the should be done once. If you are using Dagger you will
 class AppModule {
     @AppScope
     @Provides
-    fun providePermissionsManager(): PermissionsManager =
+    fun providePermissionsManager(context: Context): PermissionsManager =
         PermissionsComponent.Initializer()
-                            .context(this)
+                            .context(context)
                             .prepare()
 }
 ```
