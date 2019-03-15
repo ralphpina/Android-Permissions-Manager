@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.Disposable
 import net.ralphpina.permissionsmanager.Permission
 import net.ralphpina.permissionsmanager.PermissionsManager
+import net.ralphpina.permissionsmanager.isGranted
 import net.ralphpina.permissionsmanager.sample.databinding.PermissionBinding
 import net.ralphpina.permissionsmanager.sample.databinding.PermissionGroupBinding
 
@@ -38,7 +39,7 @@ private class PermissionViewHolder(
                 .doOnSuccess {
                     Toast.makeText(
                         dataBinding.root.context,
-                        "Permission result for ${it[0].permission}, given: ${it[0].isGranted}",
+                        "Permission result for ${it[0].permission}, given: ${it[0].isGranted()}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -141,6 +142,7 @@ private fun buildViewModels() = listOf(
     PermissionsModel.Perm(Permission.Phone.Answer),
     PermissionsModel.Perm(Permission.Phone.AddVoiceMail),
     PermissionsModel.Perm(Permission.Phone.UseSip),
+    PermissionsModel.Perm(Permission.Phone.AcceptHandover),
     PermissionsModel.Group("Sensors"),
     PermissionsModel.Perm(Permission.Sensors),
     PermissionsModel.Group("Sms"),

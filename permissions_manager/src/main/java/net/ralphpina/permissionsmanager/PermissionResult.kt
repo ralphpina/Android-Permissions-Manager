@@ -5,7 +5,7 @@ package net.ralphpina.permissionsmanager
  *
  * @param permission: The [Permission] this class is representing.
  *
- * @param isGranted: whether the permission is granted or not.
+ * @param result: whether the permission is granted or not, see [Result].
  *
  * @param hasAskedForPermissions: whether the user has previously asked for this permission. Keep in mind that
  * [hasAskedForPermissions] may be false, but [isMarkedAsDontAsk] may be true. See docs below for an explanation.
@@ -38,7 +38,18 @@ package net.ralphpina.permissionsmanager
  */
 data class PermissionResult(
     val permission: Permission,
-    val isGranted: Boolean,
+    val result: Result,
     val hasAskedForPermissions: Boolean,
     val isMarkedAsDontAsk: Boolean = false
 )
+
+/**
+ * Represents the result from the user. Maps to the values in [PermissionChecker].
+ */
+enum class Result {
+    GRANTED, // PermissionChecker.PERMISSION_GRANTED
+    DENIED, // PermissionChecker.PERMISSION_DENIED
+    DENIED_APP_OP // PermissionChecker.PERMISSION_DENIED_APP_OP
+}
+
+fun PermissionResult.isGranted() = result == Result.GRANTED

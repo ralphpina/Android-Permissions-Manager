@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import net.ralphpina.permissionsmanager.Permission
 import net.ralphpina.permissionsmanager.PermissionResult
 
@@ -18,7 +18,7 @@ import net.ralphpina.permissionsmanager.PermissionResult
  * This activity is transparent, so there's no UI for the user.
  */
 @TargetApi(Build.VERSION_CODES.M)
-class PermissionsRequestActivity : AppCompatActivity() {
+internal class PermissionsRequestActivity : AppCompatActivity() {
 
     private val permissionsRepository by lazy {
         PermissionsComponent.permissionsRepository
@@ -26,6 +26,7 @@ class PermissionsRequestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         if (savedInstanceState == null) {
             handleIntent(intent)
         }
@@ -53,7 +54,7 @@ class PermissionsRequestActivity : AppCompatActivity() {
                     .mapIndexed { index, permission ->
                         PermissionResult(
                             permission,
-                            grantResults[index] == PERMISSION_GRANTED,
+                            grantResults[index].mapToResults(),
                             true
                         )
                     }
@@ -101,6 +102,7 @@ internal fun String.toPermission() =
         Manifest.permission.ANSWER_PHONE_CALLS -> Permission.Phone.Answer
         Manifest.permission.ADD_VOICEMAIL -> Permission.Phone.AddVoiceMail
         Manifest.permission.USE_SIP -> Permission.Phone.UseSip
+        Manifest.permission.ACCEPT_HANDOVER -> Permission.Phone.AcceptHandover
         Manifest.permission.BODY_SENSORS -> Permission.Sensors
         Manifest.permission.SEND_SMS -> Permission.Sms.Send
         Manifest.permission.RECEIVE_SMS -> Permission.Sms.Receive

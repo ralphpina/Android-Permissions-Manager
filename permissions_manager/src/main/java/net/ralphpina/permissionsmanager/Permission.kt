@@ -3,6 +3,10 @@ package net.ralphpina.permissionsmanager
 /**
  * Maps to permission groups and permissions found here:
  * https://developer.android.com/guide/topics/permissions/overview#permission-groups
+ *
+ * However, not all permissions groups and their permissions are documented there.
+ * So the AOSP codebase is a better source:
+ * https://android.googlesource.com/platform/frameworks/base/+/master/core/res/AndroidManifest.xml
  */
 sealed class Permission(val value: String) {
     sealed class Calendar(value: String) : Permission(value) {
@@ -42,6 +46,7 @@ sealed class Permission(val value: String) {
         object Answer : Phone("android.permission.ANSWER_PHONE_CALLS")
         object AddVoiceMail : Phone("com.android.voicemail.permission.ADD_VOICEMAIL")
         object UseSip : Phone("android.permission.USE_SIP")
+        object AcceptHandover : Phone("android.permission.ACCEPT_HANDOVER")
     }
 
     // Uses the permission group name, since there's a single permission

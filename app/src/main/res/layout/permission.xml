@@ -5,6 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="net.ralphpina.permissionsmanager.Result"/>
         <variable
                 name="result"
                 type="net.ralphpina.permissionsmanager.PermissionResult"/>
@@ -48,7 +49,7 @@
             />
 
             <TextView
-                    android:text="@{result.granted ? @string/given : @string/not_given}"
+                    android:text="@{result.result == Result.GRANTED ? @string/given : @string/not_given}"
                     tools:text="Given"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -104,7 +105,7 @@
 
             <Button
                     android:text="@string/settings"
-                    android:enabled="@{result.markedAsDontAsk || result.granted ? true : false}"
+                    android:enabled="@{result.markedAsDontAsk || (result.result == Result.GRANTED) ? true : false}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/settings_button"
@@ -116,7 +117,7 @@
 
             <Button
                     android:text="@{@string/requesting_permission_text(result.permission.value)}"
-                    android:enabled="@{result.markedAsDontAsk || result.granted  ? false : true}"
+                    android:enabled="@{result.markedAsDontAsk || (result.result == Result.GRANTED)  ? false : true}"
                     tools:text="Request Camera Permission"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

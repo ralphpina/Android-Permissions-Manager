@@ -2,16 +2,16 @@ package net.ralphpina.permissionsmanager.android
 
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import net.ralphpina.permissionsmanager.Permission
+import net.ralphpina.permissionsmanager.Result
 
 /**
  * Service to wrap calls to check permissions.
  */
 internal interface PermissionsService {
     val manifestPermissions: List<String>
-    fun checkPermission(permission: Permission): Boolean
+    fun checkPermission(permission: Permission): Result
 }
 
 internal class AndroidPermissionsService(private val context: Context) :
@@ -26,5 +26,13 @@ internal class AndroidPermissionsService(private val context: Context) :
     }
 
     override fun checkPermission(permission: Permission) =
-        ContextCompat.checkSelfPermission(context, permission.value) == PermissionChecker.PERMISSION_GRANTED
+        PermissionChecker.checkSelfPermission(context, permission.value).mapToResults()
 }
+
+internal fun Int.mapToResults() =
+    when(this) {
+        PermissionChecker.PERMISSION_GRANTED -> Result.GRANTED
+        PermissionChecker.PERMISSION_DENIED -> Result.DENIED
+        PermissionChecker.PERMISSION_DENIED_APP_OP -> Result.DENIED_APP_OP
+        else -> throw IllegalArgumentException("Permissions result passed an unknown value.")
+    }

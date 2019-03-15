@@ -7,6 +7,7 @@ import io.reactivex.subjects.SingleSubject
 import net.ralphpina.permissionsmanager.Permission
 import net.ralphpina.permissionsmanager.PermissionResult
 import net.ralphpina.permissionsmanager.PermissionsManager
+import net.ralphpina.permissionsmanager.Result
 
 internal interface PermissionsRepository {
     /**
@@ -50,8 +51,12 @@ internal class PermissionsRepositoryImpl(
         }
 
     override fun request(vararg permissions: Permission): Single<List<PermissionResult>> {
-        permissions.validatePermissions()
-        permissions.checkListedInManifest()
+        try {
+            permissions.checkListedInManifest()
+            permissions.validatePermissions()
+        } catch (t: Throwable) {
+            return Single.error(t)
+        }
         permissions.markAllAsAsked()
         // if all permissions are already granted. Let's just return the results.
         return if (permissionsGranted(*permissions)) {
@@ -95,7 +100,7 @@ internal class PermissionsRepositoryImpl(
 
     private fun permissionsGranted(vararg permissions: Permission): Boolean {
         for (i in permissions) {
-            if (!permissionsService.checkPermission(i)) {
+            if (permissionsService.checkPermission(i) != Result.GRANTED) {
                 return false
             }
         }
@@ -103,12 +108,12 @@ internal class PermissionsRepositoryImpl(
     }
 
     private fun Permission.toResult(): PermissionResult {
-        val isGranted = permissionsService.checkPermission(this)
+        val result = permissionsService.checkPermission(this)
         return PermissionResult(
             this,
-            isGranted,
+            result,
             hasAskedForPermissions = requestStatusRepository.getHasAsked(this),
-            isMarkedAsDontAsk = isMarkedAsDontAsk(isGranted)
+            isMarkedAsDontAsk = isMarkedAsDontAsk(result == Result.GRANTED)
         )
     }
 
@@ -127,9 +132,8 @@ internal class PermissionsRepositoryImpl(
      */
     private fun Permission.isMarkedAsDontAsk(isGranted: Boolean) =
         !isGranted && getPermissionsInGroup().any {
-            requestStatusRepository.getHasAsked(it) != permissionsRationaleDelegate.shouldShowRequestPermissionRationale(
-                it
-            )
+            requestStatusRepository.getHasAsked(it) &&
+                    !permissionsRationaleDelegate.shouldShowRequestPermissionRationale(it)
         }
 
     private fun Array<out Permission>.checkListedInManifest() =
@@ -167,7 +171,8 @@ private fun Permission.getPermissionsInGroup(): List<Permission> =
             Permission.Phone.Call,
             Permission.Phone.Answer,
             Permission.Phone.AddVoiceMail,
-            Permission.Phone.UseSip
+            Permission.Phone.UseSip,
+            Permission.Phone.AcceptHandover
         )
         is Permission.Sensors -> listOf(Permission.Sensors)
         is Permission.Sms -> listOf(
@@ -194,5 +199,5 @@ private fun Array<out Permission>.validatePermissions() =
 private class InvalidPermissionValueException(permission: Permission) :
     Throwable("No value passed for permission $permission")
 
-private class PermissionNotRequestedInManifestException(it: Permission)
-    : Throwable("${it.value} has not been listed in the AndroidManifest file.")
+private class PermissionNotRequestedInManifestException(it: Permission) :
+    Throwable("${it.value} has not been listed in the AndroidManifest file.")
