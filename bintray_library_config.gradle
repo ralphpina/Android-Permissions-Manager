@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/ralphpina/Android-Permissions-Manager'
     gitUrl = 'https://github.com/ralphpina/Android-Permissions-Manager.git'
 
-    // Make sure to bump versionCode and versionName in permissions_manager_android/build.gradle
+    // Make sure to bump versionCode and versionName in permissions_manager_android/build.gradle and README
     libraryVersion = '3.0.1'
 
     developerId = 'ralphpina'

@@ -19,8 +19,8 @@ If your app is a monolith with a single `app` module, then you want to include b
 
 ```groovy
 dependencies {
-    implemetation 'net.ralphpina.permissionsmanager:permissions-manager:3.0.0'
-    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.0'
+    implemetation 'net.ralphpina.permissionsmanager:permissions-manager:3.0.1'
+    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.1'
 }
 ```
 
@@ -36,15 +36,15 @@ include ':app',
 Let's say that you use Dagger to build and inject dependencies in your `app` module. In `feature1/build.gradle` and `feature2/build.gradle` you would use the library by including the `permissions-manager` package:
 ```groovy
 dependencies {
-    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.0'
+    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.1'
 }
 ```
 
 Then, in your `app/build.gradle` module you would include both packages to inject `PermissionsManager` using `PermissionsComponent`:
 ```groovy
 dependencies {
-    implemetation 'net.ralphpina.permissionsmanager:permissions-manager:3.0.0'
-    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.0'
+    implemetation 'net.ralphpina.permissionsmanager:permissions-manager:3.0.1'
+    implemetation 'net.ralphpina.permissionsmanager:permissions-manager-android:3.0.1'
 }
 ```
 
