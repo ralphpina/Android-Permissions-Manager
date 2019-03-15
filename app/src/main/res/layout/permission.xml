@@ -105,7 +105,6 @@
 
             <Button
                     android:text="@string/settings"
-                    android:enabled="@{result.markedAsDontAsk || (result.result == Result.GRANTED) ? true : false}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/settings_button"
@@ -117,7 +116,6 @@
 
             <Button
                     android:text="@{@string/requesting_permission_text(result.permission.value)}"
-                    android:enabled="@{result.markedAsDontAsk || (result.result == Result.GRANTED)  ? false : true}"
                     tools:text="Request Camera Permission"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

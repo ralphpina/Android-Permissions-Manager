@@ -60,6 +60,10 @@ internal class PermissionsRepositoryImpl(
         permissions.markAllAsAsked()
         // if all permissions are already granted. Let's just return the results.
         return if (permissionsGranted(*permissions)) {
+            // refresh, since the above method method calls permissionsService.checkPermission()
+            // which may grant a permission in the system. For example, you are asking for
+            // Permission.Storage.WriteExternal when you already have Permission.Storage.ReadExternal
+            refreshPermissions()
             Single.just(permissions.map { it.toResult() })
         } else {
             with(permissions.sortedBy { it.value }) {
@@ -107,15 +111,13 @@ internal class PermissionsRepositoryImpl(
         return true
     }
 
-    private fun Permission.toResult(): PermissionResult {
-        val result = permissionsService.checkPermission(this)
-        return PermissionResult(
+    private fun Permission.toResult() =
+        PermissionResult(
             this,
-            result,
+            result = permissionsService.checkPermission(this),
             hasAskedForPermissions = requestStatusRepository.getHasAsked(this),
-            isMarkedAsDontAsk = isMarkedAsDontAsk(result == Result.GRANTED)
+            isMarkedAsDontAsk = isMarkedAsDontAsk()
         )
-    }
 
     /**
      * If a user ticks the "Don't ask again" box while denying a permission, the system will
@@ -130,14 +132,18 @@ internal class PermissionsRepositoryImpl(
      * [PermissionsRationaleDelegate.shouldShowRequestPermissionRationale] returns false is when the user clicked
      * "Don't ask again".
      */
-    private fun Permission.isMarkedAsDontAsk(isGranted: Boolean) =
-        !isGranted && getPermissionsInGroup().any {
+    private fun Permission.isMarkedAsDontAsk() =
+        getPermissionsInGroup().any {
+            permissionsService.checkPermission(it) != Result.GRANTED &&
             requestStatusRepository.getHasAsked(it) &&
                     !permissionsRationaleDelegate.shouldShowRequestPermissionRationale(it)
         }
 
     private fun Array<out Permission>.checkListedInManifest() =
-        forEach { if (!permissionsService.manifestPermissions.contains(it.value)) throw PermissionNotRequestedInManifestException(it) }
+        forEach {
+            if (!permissionsService.manifestPermissions.contains(it.value))
+                throw PermissionNotRequestedInManifestException(it)
+        }
 }
 
 /**
