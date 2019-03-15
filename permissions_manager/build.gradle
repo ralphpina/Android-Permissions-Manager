@@ -1,31 +1,9 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
 
 ext {
-
-    bintrayRepo = "maven"
-    bintrayName = "permissions-manager"
-
-    publishedGroupId = 'net.ralphpina.permissionsmanager'
     libraryName = 'permissions-manager'
     artifact = 'permissions-manager'
-
-    libraryDescription = 'Easily manage Android Marshmallow and up runtime permissions. This library is backwards compatible. In pre-Marshmallow devices permissions are returned as given.'
-
-    siteUrl = 'https://github.com/ralphpina/Android-Permissions-Manager'
-    gitUrl = 'https://github.com/ralphpina/Android-Permissions-Manager.git'
-
-    libraryVersion = '3.0.0'
-
-    developerId = 'ralphpina'
-    developerName = 'Ralph Pina'
-    developerEmail = 'ralph.pina@gmail.com'
-
-    licenseName = 'The MIT License'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
 }
 
 dependencies {
@@ -40,9 +18,4 @@ dependencies {
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
 }
 
-//Add these lines to publish library to bintray. This is the readymade scripts made by github user nuuneoi to make uploading to bintray easy.
-//Place it at the end of the file
-if (project.rootProject.file('local.properties').exists()) {
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/install.gradle'
-    apply from: 'https://raw.githubusercontent.com/wajahatkarim3/JCenter-Gradle-Scripts/master/bintray.gradle'
-}
+apply from: rootProject.file('bintray_library_config.gradle')
