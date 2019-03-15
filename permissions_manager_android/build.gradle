@@ -20,7 +20,7 @@ ext {
     bintrayRepo = "maven"
     bintrayName = "permissions-manager-android"
 
-    publishedGroupId = 'net.ralphpina.permissionsmanager.android'
+    publishedGroupId = 'net.ralphpina.permissionsmanager'
     libraryName = 'permissions-manager-android'
     artifact = 'permissions-manager-android'
 
